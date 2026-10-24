@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>BUG FINDERS COMMANDERS // Cyber Threat Ops & Mission Terminal</title>
-  <meta name="description" content="Bug Finders Commanders - Elite Cyber Intelligence, Rapid Prototyping, and Mission Dossiers.">
+  <meta name="description" content="Bug Finders Commanders - Elite Cyber Intelligence, Rapid Hackathon Prototyping, and Mission Dossiers.">
   <meta name="theme-color" content="#03070d">
   
   <!-- Fonts -->
@@ -31,6 +31,7 @@
       --crimson: #ff0055;
       --crimson-glow: rgba(255, 0, 85, 0.4);
       --purple: #b026ff;
+      --gold: #ffd700;
       
       --text-main: #e2f1fc;
       --text-muted: #7f9bb3;
@@ -43,8 +44,8 @@
       --glow-cyan: 0 0 14px var(--cyan-glow), inset 0 0 8px rgba(0, 240, 255, 0.15);
       --glow-green: 0 0 14px var(--neon-green-glow);
       --glow-crimson: 0 0 14px var(--crimson-glow);
-      --header-h: 64px;
-      --bottom-nav-h: 62px;
+      --glow-gold: 0 0 16px rgba(255, 215, 0, 0.4);
+      --header-h: 68px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,13 +66,13 @@
       position: relative;
     }
 
-    /* Scanline & CRT Vignette Overlay */
+    /* Scanline & CRT Overlay */
     .scanlines {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 999;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.03));
       background-size: 100% 3px, 6px 100%;
       opacity: 0.65;
       transition: opacity 0.3s ease;
@@ -87,7 +88,7 @@
       height: 100%;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.25;
+      opacity: 0.22;
     }
 
     /* Cyber grid overlay */
@@ -97,13 +98,13 @@
       z-index: 1;
       pointer-events: none;
       background-image: 
-        linear-gradient(to right, rgba(0, 240, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(0, 240, 255, 0.035) 1px, transparent 1px);
+        linear-gradient(to right, rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
       background-size: 45px 45px;
       mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 95%);
     }
 
-    /* App Shell Container */
+    /* App Shell */
     .app-shell {
       position: relative;
       z-index: 2;
@@ -133,7 +134,7 @@
       font-weight: bold;
     }
 
-    /* Glitch effect on header */
+    /* Glitch effect */
     .glitch {
       position: relative;
       display: inline-block;
@@ -142,10 +143,7 @@
     .glitch::before, .glitch::after {
       content: attr(data-text);
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
       clip: rect(0, 0, 0, 0);
     }
     .glitch:hover::before {
@@ -174,17 +172,19 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      height: var(--header-h);
-      background: rgba(3, 7, 13, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      min-height: var(--header-h);
+      background: rgba(3, 7, 13, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border-dim);
     }
     .top-bar .wrap {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      height: 100%;
+      padding-block: 10px;
+      gap: 12px;
     }
     .brand-logo {
       display: flex;
@@ -217,9 +217,9 @@
       color: var(--text-muted);
       text-decoration: none;
       font-family: var(--font-display);
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       letter-spacing: 0.08em;
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 6px;
       border: 1px solid transparent;
       transition: all 0.2s ease;
@@ -236,6 +236,32 @@
       display: flex;
       align-items: center;
       gap: 10px;
+    }
+
+    /* Mode Pill & Auth Controls */
+    .mode-pill {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 6px 12px;
+      border-radius: 99px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      border: 1px solid;
+      transition: all 0.25s ease;
+    }
+    .mode-pill.public {
+      background: rgba(0, 240, 255, 0.08);
+      border-color: rgba(0, 240, 255, 0.35);
+      color: var(--cyan);
+    }
+    .mode-pill.admin {
+      background: rgba(255, 215, 0, 0.12);
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: var(--glow-gold);
     }
 
     .cyber-btn-sm {
@@ -255,6 +281,36 @@
     .cyber-btn-sm:hover {
       border-color: var(--cyan);
       box-shadow: var(--glow-cyan);
+    }
+    .cyber-btn-sm.btn-admin-auth {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(255, 215, 0, 0.08);
+    }
+    .cyber-btn-sm.btn-admin-auth:hover {
+      background: var(--gold);
+      color: #000;
+      box-shadow: var(--glow-gold);
+    }
+
+    /* Admin Banner Bar */
+    .admin-banner-bar {
+      display: none;
+      background: linear-gradient(90deg, rgba(255, 0, 85, 0.15), rgba(255, 215, 0, 0.15), rgba(0, 240, 255, 0.15));
+      border-bottom: 1px solid var(--gold);
+      padding: 8px 0;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--gold);
+    }
+    .admin-banner-bar.show {
+      display: block;
+    }
+    .admin-banner-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
     }
 
     /* Buttons */
@@ -310,36 +366,46 @@
       color: #021107;
       box-shadow: 0 0 20px rgba(0, 255, 102, 0.6);
     }
+    .btn-admin {
+      background: rgba(255, 215, 0, 0.12);
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: var(--glow-gold);
+    }
+    .btn-admin:hover {
+      background: var(--gold);
+      color: #000;
+    }
 
     /* Section Styles */
     section {
-      padding-block: 60px;
+      padding-block: 55px;
       position: relative;
     }
 
     .sec-header {
-      margin-bottom: 34px;
+      margin-bottom: 30px;
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
     .sec-header h2 {
-      font-size: 2.3rem;
+      font-size: 2.2rem;
       font-weight: 700;
       color: #ffffff;
       text-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
     }
     .sec-header p {
       color: var(--text-muted);
-      font-size: 1.1rem;
+      font-size: 1.08rem;
       max-width: 680px;
       line-height: 1.5;
     }
 
-    /* Hero Section */
+    /* Hero Landing Page Section */
     .hero-section {
-      padding-top: 40px;
-      padding-bottom: 70px;
+      padding-top: 36px;
+      padding-bottom: 60px;
     }
     .hero-grid {
       display: grid;
@@ -350,15 +416,15 @@
     .hero-intel {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
     .status-badge-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       font-family: var(--font-mono);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
     }
     .status-badge {
       display: inline-flex;
@@ -384,7 +450,7 @@
     }
 
     .hero-title {
-      font-size: clamp(2.5rem, 7vw, 4.8rem);
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
       line-height: 0.95;
       font-weight: 700;
       letter-spacing: 0.03em;
@@ -394,10 +460,10 @@
       color: var(--cyan);
       text-shadow: 0 0 24px var(--cyan-glow);
       margin-top: 8px;
-      font-size: 0.75em;
+      font-size: 0.72em;
     }
     .hero-desc {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--text-muted);
       line-height: 1.6;
       max-width: 580px;
@@ -413,7 +479,7 @@
       box-shadow: var(--glow-cyan);
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       position: relative;
       overflow: hidden;
     }
@@ -436,10 +502,8 @@
     }
     .radar-sweep {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 180px;
-      height: 180px;
+      top: 50%; left: 50%;
+      width: 180px; height: 180px;
       margin: -90px 0 0 -90px;
       border-radius: 50%;
       border: 1px solid rgba(0, 240, 255, 0.25);
@@ -452,8 +516,7 @@
     }
     .radar-hud-point {
       position: absolute;
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: var(--neon-green);
       box-shadow: 0 0 10px var(--neon-green);
@@ -478,13 +541,39 @@
     }
     .radar-stat-box .val {
       font-family: var(--font-display);
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       font-weight: 700;
       color: var(--cyan);
       margin-top: 4px;
     }
 
-    /* Dashboard Metrics Counter */
+    /* Landing Showcase Featured Highlights */
+    .landing-featured-banner {
+      background: linear-gradient(135deg, rgba(11, 23, 38, 0.8), rgba(4, 10, 18, 0.9));
+      border: 1px solid var(--border-dim);
+      border-radius: 16px;
+      padding: 26px;
+      margin-top: 32px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .feat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .feat-item h4 {
+      font-size: 1.15rem;
+      color: var(--cyan);
+    }
+    .feat-item p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    /* Dashboard Metrics */
     .metrics-bar {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -513,7 +602,7 @@
     }
     .metric-card .count {
       font-family: var(--font-display);
-      font-size: 2.6rem;
+      font-size: 2.5rem;
       font-weight: 700;
       color: var(--cyan);
       line-height: 1.1;
@@ -540,15 +629,8 @@
       justify-content: space-between;
       border-bottom: 1px solid var(--border-dim);
     }
-    .terminal-dots {
-      display: flex;
-      gap: 8px;
-    }
-    .terminal-dots span {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
+    .terminal-dots { display: flex; gap: 8px; }
+    .terminal-dots span { width: 12px; height: 12px; border-radius: 50%; }
     .terminal-dots .d-red { background: #ff5f56; }
     .terminal-dots .d-yellow { background: #ffbd2e; }
     .terminal-dots .d-green { background: #27c93f; }
@@ -558,13 +640,10 @@
       color: var(--text-muted);
       letter-spacing: 0.08em;
     }
-    .terminal-actions {
-      display: flex;
-      gap: 8px;
-    }
+    .terminal-actions { display: flex; gap: 8px; }
 
     .terminal-body {
-      height: 480px;
+      height: 440px;
       overflow-y: auto;
       padding: 16px 20px;
       display: flex;
@@ -612,6 +691,15 @@
       background: var(--cyan);
       color: #000;
       box-shadow: 0 0 10px var(--cyan);
+    }
+    .quick-chip.admin-chip {
+      border-color: rgba(255, 215, 0, 0.4);
+      color: var(--gold);
+    }
+    .quick-chip.admin-chip:hover {
+      background: var(--gold);
+      color: #000;
+      box-shadow: var(--glow-gold);
     }
 
     .terminal-input-bar {
@@ -669,6 +757,34 @@
       color: var(--cyan);
       background: rgba(0, 240, 255, 0.08);
       box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+    }
+
+    /* Admin-only container display controls */
+    .admin-only-elem {
+      display: none !important;
+    }
+    body.is-admin .admin-only-elem {
+      display: inline-flex !important;
+    }
+    body.is-admin .admin-only-block {
+      display: block !important;
+    }
+
+    .public-only-notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 240, 255, 0.06);
+      border: 1px dashed var(--border-accent);
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+    body.is-admin .public-only-notice {
+      display: none !important;
     }
 
     .projects-grid {
@@ -898,7 +1014,7 @@
       font-weight: 500;
     }
 
-    /* Modal / Dossier / Add Project Sheet */
+    /* Modal / Dossier / Auth Sheet */
     .cyber-modal {
       position: fixed;
       inset: 0;
@@ -907,8 +1023,8 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(2, 6, 12, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(2, 6, 12, 0.88);
+      backdrop-filter: blur(14px);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
@@ -931,6 +1047,10 @@
       flex-direction: column;
       gap: 20px;
       position: relative;
+    }
+    .modal-box.admin-modal {
+      border-color: var(--gold);
+      box-shadow: var(--glow-gold);
     }
     .modal-close-btn {
       position: absolute;
@@ -1041,7 +1161,7 @@
     <!-- Top Navigation Header -->
     <header class="top-bar">
       <div class="wrap">
-          <a href="#home" class="brand-logo" aria-label="Bug Finders Commanders Home">
+        <a href="#home" class="brand-logo" aria-label="Bug Finders Commanders Home">
           <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke-width="2">
             <path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z"/>
             <path d="M9 12l2 2 4-4"/>
@@ -1050,17 +1170,28 @@
         </a>
 
         <nav class="nav-links" aria-label="Tactical Navigation">
-          <a href="#home">Commanders HQ</a>
-          <a href="#terminal">Terminal</a>
+          <a href="#home">Landing HQ</a>
           <a href="#projects">Operations & Cases</a>
           <a href="#agents">Roster</a>
+          <a href="#terminal">Terminal</a>
           <a href="#analytics">Threat Intel</a>
         </nav>
 
         <div class="top-actions">
-          <button class="cyber-btn-sm" id="btn-audio" title="Toggle Cyber Audio Synthesizer">
-            <span id="audio-icon">🔊</span> <span id="audio-label">FX: ON</span>
+          <!-- View Indicator / Switcher -->
+          <span class="mode-pill public" id="view-mode-pill">
+            <span class="pulse-dot" style="width:6px; height:6px;"></span>
+            <span id="view-mode-text">PUBLIC GUEST</span>
+          </span>
+
+          <button class="cyber-btn-sm btn-admin-auth" id="btn-toggle-auth" title="Authenticate as Commander">
+            <span id="auth-btn-icon">🔑</span> <span id="auth-btn-label">Commander Login</span>
           </button>
+
+          <button class="cyber-btn-sm" id="btn-audio" title="Toggle Cyber Audio Synthesizer">
+            <span id="audio-icon">🔊</span> <span id="audio-label">FX</span>
+          </button>
+          
           <button class="cyber-btn-sm" id="btn-crt" title="Toggle CRT Scanline Filter">
             CRT
           </button>
@@ -1068,8 +1199,22 @@
       </div>
     </header>
 
+    <!-- Admin Elevated Banner (Shown only when in Commander Mode) -->
+    <div class="admin-banner-bar" id="admin-banner-bar">
+      <div class="wrap admin-banner-content">
+        <div>
+          <strong>[★ ELEVATED COMMANDER ACCESS GRANTED]</strong> Operative: Piyush Kumar Dey [BF-001] // Level 5 Clearance Active.
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="cyber-btn-sm" id="btn-admin-add-case" style="border-color:var(--gold); color:var(--gold)">+ Deploy Project</button>
+          <button class="cyber-btn-sm" id="btn-quick-logout" style="border-color:var(--crimson); color:var(--crimson)">Exit Admin</button>
+        </div>
+      </div>
+    </div>
+
     <main id="main">
-      <!-- Hero Section -->
+      
+      <!-- HERO LANDING PAGE -->
       <section class="hero-section" id="home">
         <div class="wrap">
           <div class="hero-grid">
@@ -1083,11 +1228,11 @@
                   HQ CLOCK: <strong id="clock-display" style="margin-left:4px">--:--:--</strong>
                 </span>
                 <span class="status-badge">
-                  SESSION ID: <strong id="session-tag" style="margin-left:4px">BF-ALPHA</strong>
+                  NODE: <strong style="color:var(--neon-green); margin-left:4px;">IIT BHUBANESWAR</strong>
                 </span>
               </div>
 
-              <div class="eyebrow">IIT BHUBANESWAR // SPECIAL OPERATIONS SQUAD</div>
+              <div class="eyebrow">ELITE HACKATHON CYBER DIVISION // IIT BHUBANESWAR</div>
               
               <h1 class="hero-title">
                 BUG FINDERS
@@ -1095,19 +1240,21 @@
               </h1>
 
               <p class="hero-desc">
-                Elite tactical engineering squadron building resilient architectures, rapid hackathon prototypes, and high-security systems. Under direct command of Commander Piyush Kumar Dey and Deputy Commander Kunal Kumar.
+                High-performance cyber squadron engineering next-generation architectures, rapid hackathon prototypes, and resilient web solutions. Led by Commander <strong>Piyush Kumar Dey</strong> and Deputy Commander <strong>Kunal Kumar</strong>.
               </p>
 
-              <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:10px;">
-                <a href="#terminal" class="btn btn-primary">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-                  Access Terminal
-                </a>
-                <a href="#projects" class="btn btn-outline">
+              <!-- Dynamic CTA buttons (changes based on Public vs Admin view) -->
+              <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:8px;">
+                <a href="#projects" class="btn btn-primary">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                  Explore Case Files
+                  Explore Public Operations
                 </a>
-                <button class="btn btn-accent" id="btn-quick-add-proj">
+                <a href="#terminal" class="btn btn-outline">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  Terminal Directives
+                </a>
+                <!-- Admin-Only Button -->
+                <button class="btn btn-admin admin-only-elem" id="hero-admin-add-btn">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                   + Add New Project
                 </button>
@@ -1126,19 +1273,38 @@
                 <div class="radar-hud-point" style="top:65%; left:70%; background:var(--amber); box-shadow:0 0 10px var(--amber)"></div>
                 <div class="radar-hud-point" style="top:48%; left:28%;"></div>
                 <div class="mono" style="font-size:0.75rem; color:var(--cyan); z-index:2; text-shadow:0 0 8px #000;">
-                  IIT BBS NODE ACTIVE
+                  IIT BBS RADAR ACTIVE
                 </div>
               </div>
               <div class="radar-stats-grid">
                 <div class="radar-stat-box">
-                  <div class="label">Squad Operatives</div>
-                  <div class="val" id="stat-agents-count">7 ACTIVE</div>
+                  <div class="label">Active Operatives</div>
+                  <div class="val" id="stat-agents-count">7 SQUAD</div>
                 </div>
                 <div class="radar-stat-box">
                   <div class="label">Live Deployments</div>
-                  <div class="val" id="stat-cases-count">3 DEPLOYED</div>
+                  <div class="val" id="stat-cases-count">3 CASES</div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- Featured Landing Showcase Callout -->
+          <div class="landing-featured-banner">
+            <div class="feat-item">
+              <h4>🗡️ Case-01: QuestForge (Life RPG)</h4>
+              <p>Turn daily grind into epic RPG progression. XP, levels, attribute growth, and armory looting. 24-Hour Hackathon build.</p>
+              <a href="https://questforge-life-rpg.netlify.app" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Launch Live App</a>
+            </div>
+            <div class="feat-item">
+              <h4>🏛️ Case-02: UNIFY Campus OS</h4>
+              <p>Centralized student & campus super-portal with 60+ modular services, role-based security, and event streaming.</p>
+              <a href="https://unify-campus-portal.netlify.app" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Launch Portal</a>
+            </div>
+            <div class="feat-item">
+              <h4>🛡️ Squad Intelligence Hierarchy</h4>
+              <p>Strict division of responsibilities: Strategic Command, Content Operations, Voice Intelligence (VIU), Presentation, and Field Operations.</p>
+              <a href="#agents" class="mono" style="color:var(--neon-green); font-size:0.85rem; text-decoration:none;">&rarr; Inspect Squad Roster</a>
             </div>
           </div>
 
@@ -1157,68 +1323,13 @@
             <div class="metric-card">
               <span class="title">SQUAD INTEGRITY</span>
               <span class="count" style="color:var(--amber)">100%</span>
-              <span class="sub">All Units Deployed & Ready</span>
+              <span class="sub">7 Active Elite Operatives</span>
             </div>
             <div class="metric-card">
               <span class="title">SUCCESS RATE</span>
               <span class="count">98.4%</span>
-              <span class="sub">Zero Critical Vulnerabilities</span>
+              <span class="sub">Verified Zero Vulnerabilities</span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Terminal Command Console -->
-      <section id="terminal">
-        <div class="wrap">
-          <div class="sec-header">
-            <div>
-              <div class="eyebrow">ROOT SHELL ACCESS</div>
-              <h2>CYBER COMMAND CONSOLE</h2>
-              <p>Execute tactical terminal directives, run vulnerability diagnostics, deploy projects, and inspect classified intelligence.</p>
-            </div>
-          </div>
-
-          <div class="terminal-container">
-            <div class="terminal-header">
-              <div class="terminal-dots">
-                <span class="d-red"></span>
-                <span class="d-yellow"></span>
-                <span class="d-green"></span>
-              </div>
-              <div class="terminal-title">piyush@bugfinders-hq: /secure/ops (bash)</div>
-              <div class="terminal-actions">
-                <button class="cyber-btn-sm" id="btn-clear-term">CLEAR</button>
-                <button class="cyber-btn-sm" id="btn-copy-term">COPY LOG</button>
-              </div>
-            </div>
-
-            <div class="terminal-body" id="term-body" tabindex="0">
-              <!-- Initial boot messages loaded via JS -->
-            </div>
-
-            <!-- Quick Command Chips -->
-            <div class="terminal-quick-bar">
-              <button class="quick-chip" data-cmd="help">HELP</button>
-              <button class="quick-chip" data-cmd="team">TEAM</button>
-              <button class="quick-chip" data-cmd="projects">PROJECTS</button>
-              <button class="quick-chip" data-cmd="addproject">+ ADD PROJECT</button>
-              <button class="quick-chip" data-cmd="questforge">QUESTFORGE</button>
-              <button class="quick-chip" data-cmd="unify">UNIFY</button>
-              <button class="quick-chip" data-cmd="scan">SCAN NETWORK</button>
-              <button class="quick-chip" data-cmd="decrypt">DECRYPT</button>
-              <button class="quick-chip" data-cmd="matrix">TOGGLE MATRIX</button>
-              <button class="quick-chip" data-cmd="deploy">DEPLOY INFO</button>
-              <button class="quick-chip" data-cmd="clear">CLEAR</button>
-            </div>
-
-            <form class="terminal-input-bar" id="term-form">
-              <div class="terminal-prompt">
-                <span>root@bugfinders:~#</span>
-              </div>
-              <input type="text" id="term-input" class="terminal-input" placeholder="Enter directive (e.g. 'help', 'team', 'projects', 'scan')..." autocomplete="off" spellcheck="false">
-              <button type="submit" class="cyber-btn-sm" style="background:var(--cyan); color:#000; font-weight:bold;">EXECUTE</button>
-            </form>
           </div>
         </div>
       </section>
@@ -1229,15 +1340,22 @@
           <div class="sec-header">
             <div>
               <div class="eyebrow">DATABASE OF OPERATIONS</div>
-              <h2>CASE FILES & PROJECTS</h2>
+              <h2>CASE FILES & DEPLOYMENTS</h2>
               <p>Explore production repositories, hackathon solutions, and tactical applications built by Bug Finders.</p>
             </div>
             <div>
-              <button class="btn btn-accent" id="btn-add-case-modal">
+              <!-- Admin Only Button: Deploy New Case -->
+              <button class="btn btn-admin admin-only-elem" id="btn-add-case-modal">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Deploy New Project
               </button>
             </div>
+          </div>
+
+          <!-- Public Guest Notice (Hidden in Admin Mode) -->
+          <div class="public-only-notice">
+            <span>👁️ <strong>PUBLIC GUEST VIEW:</strong> You are browsing public case files. To add, edit, or delete operations, login as Commander.</span>
+            <button class="cyber-btn-sm btn-admin-auth" style="padding:4px 10px; font-size:0.75rem;" onclick="openAuthModal()">Login as Commander</button>
           </div>
 
           <div class="section-action-bar">
@@ -1249,7 +1367,7 @@
             </div>
             <div style="display:flex; gap:8px;">
               <button class="cyber-btn-sm" id="btn-export-data">EXPORT JSON</button>
-              <button class="cyber-btn-sm" id="btn-reset-data" title="Restore default cases">RESET CASES</button>
+              <button class="cyber-btn-sm admin-only-elem" id="btn-reset-data" title="Restore default cases">RESET CASES</button>
             </div>
           </div>
 
@@ -1266,12 +1384,70 @@
             <div>
               <div class="eyebrow">PERSONNEL INTEL</div>
               <h2>TACTICAL SQUAD ROSTER</h2>
-              <p>Official command chain, divisional operatives, and specialized intelligence units of Team BUG FINDERS.</p>
+              <p>Official command chain, divisional operatives, and specialized intelligence units of Team BUG FINDERS COMMANDERS.</p>
             </div>
           </div>
 
           <div class="agents-grid" id="agents-container">
             <!-- Dynamically populated from JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Terminal Command Console -->
+      <section id="terminal">
+        <div class="wrap">
+          <div class="sec-header">
+            <div>
+              <div class="eyebrow">COMMAND LINE ACCESS</div>
+              <h2>CYBER COMMAND CONSOLE</h2>
+              <p id="term-status-desc">Executing in Public Guest Mode. Type 'help' for directory of available directives.</p>
+            </div>
+          </div>
+
+          <div class="terminal-container">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="d-red"></span>
+                <span class="d-yellow"></span>
+                <span class="d-green"></span>
+              </div>
+              <div class="terminal-title" id="terminal-session-title">guest@bugfinders-hq: /public/viewer (bash)</div>
+              <div class="terminal-actions">
+                <button class="cyber-btn-sm" id="btn-clear-term">CLEAR</button>
+                <button class="cyber-btn-sm" id="btn-copy-term">COPY LOG</button>
+              </div>
+            </div>
+
+            <div class="terminal-body" id="term-body" tabindex="0">
+              <!-- Initial boot messages loaded via JS -->
+            </div>
+
+            <!-- Quick Command Chips -->
+            <div class="terminal-quick-bar" id="terminal-chips-bar">
+              <button class="quick-chip" data-cmd="help">HELP</button>
+              <button class="quick-chip" data-cmd="team">TEAM</button>
+              <button class="quick-chip" data-cmd="projects">PROJECTS</button>
+              <button class="quick-chip" data-cmd="questforge">QUESTFORGE</button>
+              <button class="quick-chip" data-cmd="unify">UNIFY</button>
+              <button class="quick-chip" data-cmd="scan">SCAN NETWORK</button>
+              <button class="quick-chip" data-cmd="decrypt">DECRYPT</button>
+              <button class="quick-chip" data-cmd="matrix">TOGGLE MATRIX</button>
+              <button class="quick-chip" data-cmd="deploy">DEPLOY INFO</button>
+              <!-- Admin specific chips -->
+              <button class="quick-chip admin-chip admin-only-elem" data-cmd="addproject">+ ADD PROJECT</button>
+              <button class="quick-chip admin-chip admin-only-elem" data-cmd="defcon 1">DEFCON 1</button>
+              <button class="quick-chip" data-cmd="login" id="chip-login">LOGIN</button>
+              <button class="quick-chip" data-cmd="clear">CLEAR</button>
+            </div>
+
+            <form class="terminal-input-bar" id="term-form">
+              <div class="terminal-prompt">
+                <span id="term-prompt-label">guest@bugfinders:~$</span>
+              </div>
+              <input type="text" id="term-input" class="terminal-input" placeholder="Enter directive (e.g. 'help', 'team', 'projects', 'login')..." autocomplete="off" spellcheck="false">
+              <button type="submit" class="cyber-btn-sm" style="background:var(--cyan); color:#000; font-weight:bold;">EXECUTE</button>
+            </form>
           </div>
         </div>
       </section>
@@ -1343,20 +1519,20 @@
               <h3 style="margin-bottom:16px; font-size:1.2rem; color:var(--cyan);">System Diagnostic Status</h3>
               <div class="mono" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:0.9rem;">
                 <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
-                  <div style="color:var(--text-dim); font-size:0.75rem;">UPTIME</div>
-                  <div style="color:var(--neon-green); font-size:1.3rem; font-weight:bold; margin-top:4px;">99.98%</div>
+                  <div style="color:var(--text-dim); font-size:0.75rem;">HOSTING</div>
+                  <div style="color:var(--neon-green); font-size:1.2rem; font-weight:bold; margin-top:4px;">GITHUB PAGES</div>
                 </div>
                 <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
-                  <div style="color:var(--text-dim); font-size:0.75rem;">FIREWALL</div>
-                  <div style="color:var(--cyan); font-size:1.3rem; font-weight:bold; margin-top:4px;">ENFORCED</div>
+                  <div style="color:var(--text-dim); font-size:0.75rem;">NETWORK</div>
+                  <div style="color:var(--cyan); font-size:1.2rem; font-weight:bold; margin-top:4px;">GLOBAL CDN</div>
                 </div>
                 <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
-                  <div style="color:var(--text-dim); font-size:0.75rem;">DEPLOYMENT</div>
-                  <div style="color:var(--neon-green); font-size:1.3rem; font-weight:bold; margin-top:4px;">NETLIFY LIVE</div>
+                  <div style="color:var(--text-dim); font-size:0.75rem;">CURRENT VIEW</div>
+                  <div style="color:var(--gold); font-size:1.2rem; font-weight:bold; margin-top:4px;" id="stat-view-mode">GUEST MODE</div>
                 </div>
                 <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
-                  <div style="color:var(--text-dim); font-size:0.75rem;">SSL / TLS</div>
-                  <div style="color:var(--cyan); font-size:1.3rem; font-weight:bold; margin-top:4px;">SHA-256</div>
+                  <div style="color:var(--text-dim); font-size:0.75rem;">SECURITY</div>
+                  <div style="color:var(--neon-green); font-size:1.2rem; font-weight:bold; margin-top:4px;">ENFORCED</div>
                 </div>
               </div>
             </div>
@@ -1377,6 +1553,35 @@
         </p>
       </div>
     </footer>
+  </div>
+
+  <!-- Modal: Commander Authentication Dialog -->
+  <div class="cyber-modal" id="modal-auth" role="dialog" aria-modal="true" aria-labelledby="modal-auth-title">
+    <div class="modal-box admin-modal">
+      <button class="modal-close-btn" id="btn-close-auth-modal" aria-label="Close dialog">&times;</button>
+      <div class="eyebrow" style="color:var(--gold)">SECURITY LEVEL 5 PROTOCOL</div>
+      <h3 id="modal-auth-title" style="color:#fff; font-size:1.6rem;">COMMANDER EXECUTIVE AUTHENTICATION</h3>
+      <p style="color:var(--text-muted); font-size:0.95rem; line-height:1.5;">
+        Enter Commander Passcode or trigger Biometric Bypass to access elevated project management, case deletion, and root directives.
+      </p>
+
+      <form id="form-auth" style="display:flex; flex-direction:column; gap:16px;">
+        <div class="form-group">
+          <label for="auth-passcode" style="color:var(--gold)">Commander Access Key / Passcode</label>
+          <input type="password" id="auth-passcode" placeholder="Enter key (e.g. BF001, commander, piyush)" autocomplete="off">
+          <span class="mono" style="font-size:0.75rem; color:var(--text-dim);">Hint: 'BF001' or click Commander Bypass below</span>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; margin-top:8px;">
+          <button type="button" class="btn btn-outline" id="btn-bypass-auth" style="border-color:var(--gold); color:var(--gold)">
+            ⚡ Quick Access: Commander Bypass
+          </button>
+          <button type="submit" class="btn btn-primary" style="background:var(--gold); color:#000;">
+            Verify & Unlock Admin
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- Modal: Add New Project / Case File -->
@@ -1430,7 +1635,7 @@
           </div>
           <div class="form-group">
             <label for="proj-github-url">GitHub Repository URL</label>
-            <input type="url" id="proj-github-url" placeholder="https://github.com/bugfinders/...">
+            <input type="url" id="proj-github-url" placeholder="https://github.com/piyush77777777777/...">
           </div>
         </div>
 
@@ -1459,6 +1664,65 @@
   <script>
     (function () {
       "use strict";
+
+      /* ================= VIEW MODE STATE: PUBLIC GUEST vs COMMANDER ADMIN ================= */
+      var isAdmin = false;
+      try {
+        isAdmin = sessionStorage.getItem("bf_is_admin") === "true";
+      } catch (e) {
+        isAdmin = false;
+      }
+
+      function applyViewMode() {
+        var body = document.body;
+        var pill = document.getElementById("view-mode-pill");
+        var pillText = document.getElementById("view-mode-text");
+        var authBtnLabel = document.getElementById("auth-btn-label");
+        var authBtnIcon = document.getElementById("auth-btn-icon");
+        var adminBanner = document.getElementById("admin-banner-bar");
+        var termPrompt = document.getElementById("term-prompt-label");
+        var termTitle = document.getElementById("terminal-session-title");
+        var termDesc = document.getElementById("term-status-desc");
+        var statView = document.getElementById("stat-view-mode");
+
+        if (isAdmin) {
+          body.classList.add("is-admin");
+          pill.className = "mode-pill admin";
+          pillText.textContent = "COMMANDER ADMIN [BF-001]";
+          authBtnLabel.textContent = "Lock Admin";
+          authBtnIcon.textContent = "🔒";
+          adminBanner.classList.add("show");
+          termPrompt.textContent = "root@bugfinders-hq:~#";
+          termTitle.textContent = "piyush@bugfinders-hq: /secure/ops (bash) [ROOT]";
+          termDesc.textContent = "Executing in Commander Executive Mode. Full administrative & deployment clearance active.";
+          statView.textContent = "COMMANDER ROOT";
+          statView.style.color = "var(--gold)";
+        } else {
+          body.classList.remove("is-admin");
+          pill.className = "mode-pill public";
+          pillText.textContent = "PUBLIC GUEST";
+          authBtnLabel.textContent = "Commander Login";
+          authBtnIcon.textContent = "🔑";
+          adminBanner.classList.remove("show");
+          termPrompt.textContent = "guest@bugfinders:~$";
+          termTitle.textContent = "guest@bugfinders-hq: /public/viewer (bash)";
+          termDesc.textContent = "Executing in Public Guest Mode. Type 'help' for directory of available directives.";
+          statView.textContent = "PUBLIC GUEST";
+          statView.style.color = "var(--cyan)";
+        }
+
+        renderCases();
+      }
+
+      function setAdminMode(val) {
+        isAdmin = !!val;
+        try {
+          sessionStorage.setItem("bf_is_admin", isAdmin ? "true" : "false");
+        } catch (e) {}
+        applyViewMode();
+        playSound(isAdmin ? 'granted' : 'alert');
+        showToast(isAdmin ? "Commander Access Granted: Welcome Piyush Kumar Dey" : "Admin Session Terminated: Returned to Public View");
+      }
 
       /* ================= AUDIO SYNTHESIZER (Web Audio API) ================= */
       var audioEnabled = true;
@@ -1518,15 +1782,13 @@
             osc.start(now);
             osc.stop(now + 0.25);
           }
-        } catch (e) {
-          // Audio context might be blocked until user gesture
-        }
+        } catch (e) {}
       }
 
       var btnAudio = document.getElementById('btn-audio');
       btnAudio.addEventListener('click', function () {
         audioEnabled = !audioEnabled;
-        document.getElementById('audio-label').textContent = audioEnabled ? 'FX: ON' : 'FX: OFF';
+        document.getElementById('audio-label').textContent = audioEnabled ? 'FX' : 'OFF';
         document.getElementById('audio-icon').textContent = audioEnabled ? '🔊' : '🔇';
         if (audioEnabled) playSound('granted');
         showToast(audioEnabled ? 'Cyber Synthesizer Audio Enabled' : 'Cyber Audio Muted');
@@ -1575,7 +1837,6 @@
           var x = i * fontSize;
           var y = drops[i] * fontSize;
 
-          // Occasionally paint brighter cyan or neon green head
           if (Math.random() > 0.85) {
             ctx.fillStyle = "#ffffff";
           } else if (Math.random() > 0.6) {
@@ -1594,8 +1855,7 @@
       }
       setInterval(drawMatrix, 45);
 
-      /* ================= DATA REPOSITORY ================= */
-      /* OFFICIAL SQUAD ROSTER */
+      /* ================= SQUAD ROSTER ================= */
       var SQUAD = [
         {
           id: "BF-001",
@@ -1742,8 +2002,8 @@
             "Automated SSL/TLS cipher audit and HTTP security header compliance scoring.",
             "Interactive topological network graph displaying active nodes and vulnerabilities."
           ],
-          demoUrl: "https://cyberguard-sentinel.netlify.app",
-          githubUrl: "https://github.com/bugfinders/cyberguard-sentinel"
+          demoUrl: "https://piyush77777777777.github.io/bugfinders-commanders/",
+          githubUrl: "https://github.com/piyush77777777777/bugfinders-commanders"
         }
       ];
 
@@ -1764,9 +2024,7 @@
       function saveCases() {
         try {
           localStorage.setItem("bf_custom_cases_v2", JSON.stringify(currentCases));
-        } catch (e) {
-          console.error("Storage error:", e);
-        }
+        } catch (e) {}
         renderCases();
         updateStats();
       }
@@ -1810,7 +2068,7 @@
 
         if (filtered.length === 0) {
           container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; border:1px dashed var(--border-dim); border-radius:12px; color:var(--text-muted); font-family:var(--font-mono);">' +
-            'No operations found under category "' + esc(activeFilter) + '". Click "+ Add New Project" to register one.' +
+            'No operations found under category "' + esc(activeFilter) + '".' + (isAdmin ? ' Click "+ Deploy New Project" to register one.' : '') +
             '</div>';
           return;
         }
@@ -1825,10 +2083,17 @@
           var demoBtn = c.demoUrl ? '<a href="' + esc(c.demoUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm" style="color:var(--neon-green); border-color:rgba(0,255,102,0.3)">Live Web</a>' : '';
           var ghBtn = c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm">Repo</a>' : '';
 
+          // Admin controls on card (Edit / Delete)
+          var adminCardActions = isAdmin ? 
+            '<button type="button" class="cyber-btn-sm btn-del-case" data-id="' + esc(c.id) + '" style="color:var(--crimson); border-color:rgba(255,0,85,0.4);" title="Delete Case">✕</button>' : '';
+
           return '<article class="project-card ' + (c.starred ? 'starred' : '') + '" data-id="' + esc(c.id) + '">' +
             '<div class="project-card-header">' +
               '<span class="case-code">' + esc(c.caseCode) + '</span>' +
-              '<span class="badge-status ' + statusClass + '">' + esc(c.status) + '</span>' +
+              '<div style="display:flex; align-items:center; gap:6px;">' +
+                '<span class="badge-status ' + statusClass + '">' + esc(c.status) + '</span>' +
+                adminCardActions +
+              '</div>' +
             '</div>' +
             '<h3>' + esc(c.name) + '</h3>' +
             '<div class="project-tagline">' + esc(c.tagline) + '</div>' +
@@ -1844,22 +2109,35 @@
           '</article>';
         }).join("");
 
-        // Attach event listeners for card buttons
-        var dossierBtns = container.querySelectorAll('.btn-dossier');
-        dossierBtns.forEach(function (btn) {
+        // Attach listeners
+        container.querySelectorAll('.btn-dossier').forEach(function (btn) {
           btn.addEventListener('click', function () {
             playSound('beep');
             openCaseDossier(btn.getAttribute('data-id'));
           });
         });
 
-        var starBtns = container.querySelectorAll('.btn-star');
-        starBtns.forEach(function (btn) {
+        container.querySelectorAll('.btn-star').forEach(function (btn) {
           btn.addEventListener('click', function () {
             playSound('beep');
             toggleStarCase(btn.getAttribute('data-id'));
           });
         });
+
+        if (isAdmin) {
+          container.querySelectorAll('.btn-del-case').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var id = btn.getAttribute('data-id');
+              var c = currentCases.find(function (item) { return item.id === id; });
+              if (c && confirm("ADMIN OVERRIDE: Permanently delete operation " + c.name + "?")) {
+                currentCases = currentCases.filter(function (item) { return item.id !== id; });
+                saveCases();
+                playSound('alert');
+                showToast("Operation Deleted: " + c.name);
+              }
+            });
+          });
+        }
       }
 
       function toggleStarCase(id) {
@@ -1885,6 +2163,9 @@
           return '<span class="tech-tag" style="font-size:0.8rem;">' + esc(t) + '</span>';
         }).join("");
 
+        var adminDeleteBtn = isAdmin ? 
+          '<button type="button" class="btn btn-outline" id="btn-delete-case-modal" style="color:var(--crimson); border-color:rgba(255,0,85,0.4);">[Admin] Delete Case</button>' : '';
+
         content.innerHTML = '<div class="eyebrow">' + esc(c.caseCode) + ' // CLASSIFIED DOSSIER</div>' +
           '<h2 style="color:#fff; font-size:1.9rem; margin-top:4px;">' + esc(c.fullName || c.name) + '</h2>' +
           '<div style="color:var(--cyan); font-weight:600; font-size:1.1rem; margin-top:4px;">' + esc(c.tagline) + '</div>' +
@@ -1903,7 +2184,7 @@
           '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; padding-top:16px; border-top:1px solid var(--border-dim);">' +
             (c.demoUrl ? '<a href="' + esc(c.demoUrl) + '" target="_blank" rel="noopener" class="btn btn-primary">Open Live Deployment</a>' : '') +
             (c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="btn btn-outline">Inspect GitHub Codebase</a>' : '') +
-            '<button type="button" class="btn btn-outline" id="btn-delete-case-modal" style="color:var(--crimson); border-color:rgba(255,0,85,0.4);">Delete Case</button>' +
+            adminDeleteBtn +
           '</div>';
 
         modal.classList.add("open");
@@ -1911,11 +2192,11 @@
         var delBtn = document.getElementById('btn-delete-case-modal');
         if (delBtn) {
           delBtn.onclick = function () {
-            if (confirm("Are you sure you want to permanently delete case file " + c.name + "?")) {
+            if (confirm("ADMIN CONFIRMATION: Permanently delete case " + c.name + "?")) {
               currentCases = currentCases.filter(function (item) { return item.id !== c.id; });
               saveCases();
               modal.classList.remove("open");
-              showToast("Case Deleted: " + c.name);
+              showToast("Operation Deleted: " + c.name);
             }
           };
         }
@@ -1938,7 +2219,6 @@
         var container = document.getElementById("agents-container");
         container.innerHTML = SQUAD.map(function (a) {
           var isLeader = a.id === "BF-001";
-          var isDeputy = a.id === "BF-002";
 
           return '<article class="agent-card ' + (isLeader ? 'commander-card' : '') + '">' +
             '<div class="agent-top-row">' +
@@ -1975,35 +2255,80 @@
         });
       }
 
-      /* Update Statistics */
       function updateStats() {
-        document.getElementById('stat-cases-count').textContent = currentCases.length + ' DEPLOYED';
+        document.getElementById('stat-cases-count').textContent = currentCases.length + ' CASES';
         document.getElementById('dash-total-ops').textContent = currentCases.length;
-        document.getElementById('stat-agents-count').textContent = SQUAD.length + ' ACTIVE';
+        document.getElementById('stat-agents-count').textContent = SQUAD.length + ' SQUAD';
       }
+
+      /* ================= AUTHENTICATION MODAL (COMMANDER LOGIN) ================= */
+      var modalAuth = document.getElementById("modal-auth");
+      var btnToggleAuth = document.getElementById("btn-toggle-auth");
+      var btnCloseAuth = document.getElementById("btn-close-auth-modal");
+      var formAuth = document.getElementById("form-auth");
+      var btnBypassAuth = document.getElementById("btn-bypass-auth");
+      var btnQuickLogout = document.getElementById("btn-quick-logout");
+
+      window.openAuthModal = function() {
+        if (isAdmin) {
+          // If already admin, clicking locks/logs out
+          setAdminMode(false);
+          return;
+        }
+        playSound('beep');
+        modalAuth.classList.add("open");
+        document.getElementById("auth-passcode").focus();
+      };
+
+      btnToggleAuth.addEventListener("click", window.openAuthModal);
+      btnCloseAuth.addEventListener("click", function () { modalAuth.classList.remove("open"); });
+      if (btnQuickLogout) {
+        btnQuickLogout.addEventListener("click", function () { setAdminMode(false); });
+      }
+
+      btnBypassAuth.addEventListener("click", function () {
+        modalAuth.classList.remove("open");
+        setAdminMode(true);
+      });
+
+      formAuth.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var key = document.getElementById("auth-passcode").value.trim().toLowerCase();
+        // Valid passcodes for Commander
+        if (key === "bf001" || key === "commander" || key === "piyush" || key === "admin") {
+          document.getElementById("auth-passcode").value = "";
+          modalAuth.classList.remove("open");
+          setAdminMode(true);
+        } else {
+          playSound('alert');
+          showToast("Authentication Failed: Invalid Commander Key");
+        }
+      });
 
       /* ================= ADD PROJECT MODAL & EXPORT ================= */
       var modalAdd = document.getElementById("modal-add-project");
       var btnOpenAdd = document.getElementById("btn-add-case-modal");
-      var btnQuickAdd = document.getElementById("btn-quick-add-proj");
+      var btnAdminAddHero = document.getElementById("hero-admin-add-btn");
+      var btnAdminBannerAdd = document.getElementById("btn-admin-add-case");
       var btnCloseAdd = document.getElementById("btn-close-add-modal");
       var btnCancelAdd = document.getElementById("btn-cancel-add-modal");
       var formAdd = document.getElementById("form-add-project");
 
       function openAddModal() {
+        if (!isAdmin) {
+          window.openAuthModal();
+          return;
+        }
         playSound('beep');
         modalAdd.classList.add("open");
         document.getElementById("proj-name").focus();
-        // Prefill default next case code
-        var nextNum = currentCases.length + 1;
-        document.getElementById("proj-case-code").value = "CASE-0" + nextNum;
+        document.getElementById("proj-case-code").value = "CASE-0" + (currentCases.length + 1);
       }
-      function closeAddModal() {
-        modalAdd.classList.remove("open");
-      }
+      function closeAddModal() { modalAdd.classList.remove("open"); }
 
-      btnOpenAdd.addEventListener("click", openAddModal);
-      btnQuickAdd.addEventListener("click", openAddModal);
+      if (btnOpenAdd) btnOpenAdd.addEventListener("click", openAddModal);
+      if (btnAdminAddHero) btnAdminAddHero.addEventListener("click", openAddModal);
+      if (btnAdminBannerAdd) btnAdminBannerAdd.addEventListener("click", openAddModal);
       btnCloseAdd.addEventListener("click", closeAddModal);
       btnCancelAdd.addEventListener("click", closeAddModal);
 
@@ -2013,7 +2338,6 @@
         modalDossier.classList.remove("open");
       });
 
-      // Handle add project submission
       formAdd.addEventListener("submit", function (e) {
         e.preventDefault();
         var name = document.getElementById("proj-name").value.trim();
@@ -2041,7 +2365,7 @@
           tech: techArray,
           points: [
             "Project architecture initialized by Team Bug Finders.",
-            "Fully deployed and registered in tactical database."
+            "Deployed and authenticated in command database."
           ],
           demoUrl: demoUrl || "",
           githubUrl: githubUrl || ""
@@ -2053,8 +2377,6 @@
         closeAddModal();
         playSound('granted');
         showToast("Operation Registered: " + name);
-
-        // Scroll to projects section
         window.location.hash = "#projects";
       });
 
@@ -2068,12 +2390,16 @@
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
-        showToast("Database exported as JSON");
+        showToast("Case database exported as JSON");
       });
 
-      // Reset default cases
+      // Reset default cases (Admin only)
       document.getElementById("btn-reset-data").addEventListener("click", function () {
-        if (confirm("Reset case database back to original defaults?")) {
+        if (!isAdmin) {
+          window.openAuthModal();
+          return;
+        }
+        if (confirm("ADMIN CONFIRMATION: Reset case database back to original defaults?")) {
           currentCases = DEFAULT_CASES;
           saveCases();
           playSound('alert');
@@ -2099,30 +2425,35 @@
       function bootTerminal() {
         termBody.innerHTML = "";
         appendTerm("==================================================================", "dim");
-        appendTerm(" BUG FINDERS COMMANDERS // V3.8 TACTICAL CORE", "cmd");
+        appendTerm(" BUG FINDERS COMMANDERS // V3.8 TACTICAL SHELL", "cmd");
+        appendTerm(" Mode: " + (isAdmin ? "[ROOT COMMANDER ADMIN]" : "[PUBLIC GUEST VIEW]"), isAdmin ? "warn" : "accent");
         appendTerm(" Commander:        Piyush Kumar Dey [BF-001]", "accent");
         appendTerm(" Deputy Commander: Kunal Kumar [BF-002]", "accent");
-        appendTerm(" Host: IIT Bhubaneswar Network (Autonomous Node)", "dim");
-        appendTerm(" Type 'help' for directory of operational commands.", "warn");
+        appendTerm(" Type 'help' for available directives." + (!isAdmin ? " Type 'login' to authenticate." : ""), "dim");
         appendTerm("==================================================================", "dim");
       }
-      bootTerminal();
 
       var TERMINAL_COMMANDS = {
         help: function () {
-          appendTerm("CLASSIFIED COMMAND DIRECTORY:", "cmd");
+          appendTerm("TACTICAL COMMAND DIRECTORY (" + (isAdmin ? "ROOT ACCESS" : "GUEST ACCESS") + "):", "cmd");
           appendTerm("  help         - Display this tactical manual", "out");
           appendTerm("  team / squad - Inspect Bug Finders personnel hierarchy", "out");
           appendTerm("  projects     - List all registered cases and deployments", "out");
-          appendTerm("  addproject   - Launch wizard to register a new project", "out");
           appendTerm("  questforge   - Access Case-01: QuestForge habit RPG dossier", "out");
           appendTerm("  unify        - Access Case-02: UNIFY campus portal dossier", "out");
           appendTerm("  scan         - Execute network vulnerability sweep", "out");
           appendTerm("  decrypt      - Run cryptographic crack simulator", "out");
           appendTerm("  matrix       - Toggle Matrix digital rain animation", "out");
-          appendTerm("  whoami       - Display current caller identity & IP token", "out");
+          appendTerm("  whoami       - Display current caller identity & clearance", "out");
           appendTerm("  deploy       - Display deployment status & live URL", "out");
           appendTerm("  clear        - Wipe terminal console output", "out");
+          if (!isAdmin) {
+            appendTerm("  login        - Authenticate into Commander Admin Mode", "warn");
+          } else {
+            appendTerm("  addproject   - [ADMIN] Launch project creation wizard", "accent");
+            appendTerm("  defcon <1-5> - [ADMIN] Set operational threat readiness level", "accent");
+            appendTerm("  logout       - [ADMIN] Return to Public Guest Mode", "warn");
+          }
         },
         team: function () {
           appendTerm("TEAM BUG FINDERS COMMANDERS // HIERARCHY & UNITS:", "cmd");
@@ -2130,15 +2461,12 @@
             appendTerm("  [" + a.id + "] " + a.rank + ": " + a.name + " (" + a.role + ")", "accent");
           });
         },
-        squad: function () {
-          TERMINAL_COMMANDS.team();
-        },
+        squad: function () { TERMINAL_COMMANDS.team(); },
         projects: function () {
           appendTerm("REGISTERED CASES & OPERATIONS:", "cmd");
           currentCases.forEach(function (c) {
             appendTerm("  " + c.caseCode + " -> " + c.name + " [" + c.status + "] — " + c.tagline, "accent");
           });
-          appendTerm("Tip: Type a project codename (e.g. 'questforge') or click Dossier for full spec.", "dim");
         },
         questforge: function () {
           var c = currentCases.find(function (i) { return i.id === "questforge"; });
@@ -2151,6 +2479,11 @@
           appendTerm("Opening UNIFY Campus OS Classified Dossier modal...", "accent");
         },
         addproject: function () {
+          if (!isAdmin) {
+            appendTerm("PERMISSION DENIED: Commander authentication required. Type 'login'.", "error");
+            window.openAuthModal();
+            return;
+          }
           openAddModal();
           appendTerm("Opening New Operation Registration Wizard...", "warn");
         },
@@ -2189,9 +2522,31 @@
         },
         whoami: function () {
           appendTerm("USER TELEMETRY:", "cmd");
-          appendTerm("  Identity: Guest Operative // Bug Finders Commanders Network", "out");
-          appendTerm("  Clearance: Level 4 Provisional Access Granted", "accent");
-          appendTerm("  Terminal Node: " + navigator.userAgent.slice(0, 40) + "...", "dim");
+          if (isAdmin) {
+            appendTerm("  Identity: Commander Piyush Kumar Dey [BF-001]", "accent");
+            appendTerm("  Clearance: Level 5 [Alpha Command - Root Override]", "warn");
+            appendTerm("  Station: Bug Finders Central Command Terminal", "dim");
+          } else {
+            appendTerm("  Identity: Guest Operative // Public Explorer", "out");
+            appendTerm("  Clearance: Level 1 [Public Guest Viewer]", "dim");
+            appendTerm("  Hint: Type 'login' to authenticate as Commander", "warn");
+          }
+        },
+        login: function () {
+          if (isAdmin) {
+            appendTerm("Already authenticated in Commander Admin mode.", "warn");
+          } else {
+            window.openAuthModal();
+            appendTerm("Opening Commander Authentication Dialog...", "warn");
+          }
+        },
+        logout: function () {
+          if (!isAdmin) {
+            appendTerm("You are already in Public Guest mode.", "dim");
+          } else {
+            setAdminMode(false);
+            appendTerm("Commander Session Terminated. Switched to Public Guest view.", "warn");
+          }
         },
         deploy: function () {
           appendTerm("DEPLOYMENT TELEMETRY:", "cmd");
@@ -2209,14 +2564,22 @@
         var cmd = raw.trim().toLowerCase();
         if (!cmd) return;
         playSound('cmd');
-        appendTerm("root@bugfinders:~# " + raw, "cmd");
+        var promptStr = isAdmin ? "root@bugfinders-hq:~# " : "guest@bugfinders:~$ ";
+        appendTerm(promptStr + raw, "cmd");
         termHistory.push(raw);
         termHistoryIndex = termHistory.length;
 
         if (TERMINAL_COMMANDS[cmd]) {
           TERMINAL_COMMANDS[cmd]();
+        } else if (cmd.indexOf("defcon") === 0) {
+          if (!isAdmin) {
+            appendTerm("PERMISSION DENIED: Level 5 Commander clearance required.", "error");
+          } else {
+            var lvl = cmd.split(" ")[1] || "1";
+            appendTerm("[✓] Operational readiness shifted to DEFCON " + lvl, "accent");
+            showToast("DEFCON " + lvl + " Operational Status Set");
+          }
         } else {
-          // Check if command is a case name
           var matchedCase = currentCases.find(function (c) {
             return c.id === cmd || c.name.toLowerCase() === cmd;
           });
@@ -2225,7 +2588,7 @@
             appendTerm("Displaying dossier for " + matchedCase.name + "...", "accent");
           } else {
             playSound('beep');
-            appendTerm("Directive not recognized: '" + raw + "'. Type 'help' for instructions.", "error");
+            appendTerm("Directive not recognized: '" + raw + "'. Type 'help' for manual.", "error");
           }
         }
       }
@@ -2263,11 +2626,11 @@
       });
 
       // Quick bar chips
-      document.querySelectorAll(".quick-chip").forEach(function (chip) {
-        chip.addEventListener("click", function () {
-          var cmd = chip.getAttribute("data-cmd");
-          executeCommand(cmd);
-        });
+      document.getElementById("terminal-chips-bar").addEventListener("click", function (e) {
+        var chip = e.target.closest(".quick-chip");
+        if (!chip) return;
+        var cmd = chip.getAttribute("data-cmd");
+        executeCommand(cmd);
       });
 
       document.getElementById("btn-clear-term").addEventListener("click", function () {
@@ -2287,20 +2650,22 @@
       window.addEventListener("click", function (e) {
         if (e.target === modalAdd) closeAddModal();
         if (e.target === modalDossier) modalDossier.classList.remove("open");
+        if (e.target === modalAuth) modalAuth.classList.remove("open");
       });
 
-      // Escape key closes modal
       window.addEventListener("keydown", function (e) {
         if (e.key === "Escape") {
           closeAddModal();
           modalDossier.classList.remove("open");
+          modalAuth.classList.remove("open");
         }
       });
 
       /* Initial Boot */
-      renderCases();
+      applyViewMode();
       renderSquad();
       updateStats();
+      bootTerminal();
 
     })();
   </script>
