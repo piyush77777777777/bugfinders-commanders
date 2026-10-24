@@ -1,0 +1,2308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BUG FINDERS COMMANDERS // Cyber Threat Ops & Mission Terminal</title>
+  <meta name="description" content="Bug Finders Commanders - Elite Cyber Intelligence, Rapid Prototyping, and Mission Dossiers.">
+  <meta name="theme-color" content="#03070d">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #03070d;
+      --bg-panel: rgba(8, 16, 26, 0.82);
+      --bg-panel-solid: #09121d;
+      --bg-panel-hover: rgba(14, 27, 42, 0.95);
+      --border-dim: #132738;
+      --border-bright: #00f0ff;
+      --border-accent: rgba(0, 240, 255, 0.35);
+      
+      --cyan: #00f0ff;
+      --cyan-glow: rgba(0, 240, 255, 0.4);
+      --neon-green: #00ff66;
+      --neon-green-glow: rgba(0, 255, 102, 0.35);
+      --amber: #ffaa00;
+      --amber-glow: rgba(255, 170, 0, 0.3);
+      --crimson: #ff0055;
+      --crimson-glow: rgba(255, 0, 85, 0.4);
+      --purple: #b026ff;
+      
+      --text-main: #e2f1fc;
+      --text-muted: #7f9bb3;
+      --text-dim: #446077;
+      
+      --font-display: 'Chakra Petch', sans-serif;
+      --font-ui: 'Rajdhani', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      
+      --glow-cyan: 0 0 14px var(--cyan-glow), inset 0 0 8px rgba(0, 240, 255, 0.15);
+      --glow-green: 0 0 14px var(--neon-green-glow);
+      --glow-crimson: 0 0 14px var(--crimson-glow);
+      --header-h: 64px;
+      --bottom-nav-h: 62px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      font-size: 16px;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* Scanline & CRT Vignette Overlay */
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 3px, 6px 100%;
+      opacity: 0.65;
+      transition: opacity 0.3s ease;
+    }
+    .scanlines.off { opacity: 0; }
+
+    /* Canvas background for Matrix Rain */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.25;
+    }
+
+    /* Cyber grid overlay */
+    .cyber-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.035) 1px, transparent 1px);
+      background-size: 45px 45px;
+      mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 95%);
+    }
+
+    /* App Shell Container */
+    .app-shell {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Typography & Utilities */
+    h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: 0.05em; text-transform: uppercase; }
+    .mono { font-family: var(--font-mono); }
+    .wrap { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: 20px; }
+    
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .eyebrow::before {
+      content: "//";
+      color: var(--neon-green);
+      font-weight: bold;
+    }
+
+    /* Glitch effect on header */
+    .glitch {
+      position: relative;
+      display: inline-block;
+      color: var(--text-main);
+    }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      clip: rect(0, 0, 0, 0);
+    }
+    .glitch:hover::before {
+      left: -2px;
+      text-shadow: 2px 0 var(--crimson);
+      animation: glitch-anim-1 2s infinite linear alternate-reverse;
+    }
+    .glitch:hover::after {
+      left: 2px;
+      text-shadow: -2px 0 var(--cyan);
+      animation: glitch-anim-2 2s infinite linear alternate-reverse;
+    }
+    @keyframes glitch-anim-1 {
+      0% { clip: rect(10px, 9999px, 30px, 0); }
+      50% { clip: rect(40px, 9999px, 70px, 0); }
+      100% { clip: rect(20px, 9999px, 50px, 0); }
+    }
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(35px, 9999px, 55px, 0); }
+      50% { clip: rect(15px, 9999px, 35px, 0); }
+      100% { clip: rect(60px, 9999px, 80px, 0); }
+    }
+
+    /* Top Navigation */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      height: var(--header-h);
+      background: rgba(3, 7, 13, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .top-bar .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+    .brand-logo .shield-icon {
+      width: 30px;
+      height: 30px;
+      stroke: var(--cyan);
+      filter: drop-shadow(0 0 6px var(--cyan));
+      transition: transform 0.3s ease;
+    }
+    .brand-logo:hover .shield-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--cyan);
+      border-color: var(--border-accent);
+      background: rgba(0, 240, 255, 0.06);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cyber-btn-sm {
+      background: var(--bg-panel-solid);
+      border: 1px solid var(--border-dim);
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .cyber-btn-sm:hover {
+      border-color: var(--cyan);
+      box-shadow: var(--glow-cyan);
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: var(--font-display);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.92rem;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+    .btn-primary {
+      background: var(--cyan);
+      color: #030a10;
+      border-color: var(--cyan);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+    }
+    .btn-primary:hover {
+      background: #39f6ff;
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.7);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: rgba(8, 16, 26, 0.7);
+      color: var(--text-main);
+      border-color: var(--border-dim);
+    }
+    .btn-outline:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      box-shadow: var(--glow-cyan);
+      transform: translateY(-2px);
+    }
+    .btn-accent {
+      background: rgba(0, 255, 102, 0.12);
+      border-color: var(--neon-green);
+      color: var(--neon-green);
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.25);
+    }
+    .btn-accent:hover {
+      background: var(--neon-green);
+      color: #021107;
+      box-shadow: 0 0 20px rgba(0, 255, 102, 0.6);
+    }
+
+    /* Section Styles */
+    section {
+      padding-block: 60px;
+      position: relative;
+    }
+
+    .sec-header {
+      margin-bottom: 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sec-header h2 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+    }
+    .sec-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 680px;
+      line-height: 1.5;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding-top: 40px;
+      padding-bottom: 70px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .hero-intel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .status-badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 5px 12px;
+      border-radius: 99px;
+      color: var(--cyan);
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-green);
+      box-shadow: 0 0 8px var(--neon-green);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.4; }
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 7vw, 4.8rem);
+      line-height: 0.95;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .hero-title .highlight {
+      display: block;
+      color: var(--cyan);
+      text-shadow: 0 0 24px var(--cyan-glow);
+      margin-top: 8px;
+      font-size: 0.75em;
+    }
+    .hero-desc {
+      font-size: 1.2rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 580px;
+    }
+
+    /* Hero Telemetry Radar Panel */
+    .radar-card {
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-accent);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--glow-cyan);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .radar-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+    .radar-screen {
+      height: 180px;
+      border-radius: 10px;
+      border: 1px dashed var(--border-dim);
+      background: radial-gradient(circle at center, rgba(0, 240, 255, 0.08) 0%, rgba(3, 7, 13, 0.85) 70%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .radar-sweep {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 180px;
+      height: 180px;
+      margin: -90px 0 0 -90px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      background: conic-gradient(from 0deg, rgba(0, 240, 255, 0.3) 0deg, transparent 60deg);
+      animation: sweep 4s linear infinite;
+    }
+    @keyframes sweep {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .radar-hud-point {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--neon-green);
+      box-shadow: 0 0 10px var(--neon-green);
+    }
+    .radar-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .radar-stat-box {
+      background: var(--bg-panel-solid);
+      border: 1px solid var(--border-dim);
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .radar-stat-box .label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .radar-stat-box .val {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-top: 4px;
+    }
+
+    /* Dashboard Metrics Counter */
+    .metrics-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .metric-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-dim);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .metric-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-2px);
+    }
+    .metric-card .title {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+    }
+    .metric-card .count {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: var(--cyan);
+      line-height: 1.1;
+    }
+    .metric-card .sub {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    /* Terminal Console */
+    .terminal-container {
+      background: #02060b;
+      border: 1px solid var(--border-dim);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), var(--glow-cyan);
+      font-family: var(--font-mono);
+    }
+    .terminal-header {
+      background: #09131d;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-dim);
+    }
+    .terminal-dots {
+      display: flex;
+      gap: 8px;
+    }
+    .terminal-dots span {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .terminal-dots .d-red { background: #ff5f56; }
+    .terminal-dots .d-yellow { background: #ffbd2e; }
+    .terminal-dots .d-green { background: #27c93f; }
+    
+    .terminal-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+    .terminal-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .terminal-body {
+      height: 480px;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.92rem;
+      line-height: 1.6;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border-dim) transparent;
+    }
+    .terminal-body::-webkit-scrollbar { width: 6px; }
+    .terminal-body::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 3px; }
+
+    .t-row { white-space: pre-wrap; word-break: break-word; }
+    .t-row.cmd { color: var(--cyan); font-weight: bold; }
+    .t-row.out { color: var(--text-main); }
+    .t-row.accent { color: var(--neon-green); }
+    .t-row.warn { color: var(--amber); }
+    .t-row.error { color: var(--crimson); }
+    .t-row.dim { color: var(--text-dim); }
+
+    .terminal-quick-bar {
+      padding: 10px 16px;
+      background: #070e17;
+      border-top: 1px solid var(--border-dim);
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .terminal-quick-bar::-webkit-scrollbar { display: none; }
+    .quick-chip {
+      background: rgba(0, 240, 255, 0.06);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .quick-chip:hover {
+      background: var(--cyan);
+      color: #000;
+      box-shadow: 0 0 10px var(--cyan);
+    }
+
+    .terminal-input-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      background: #050b12;
+      border-top: 1px solid var(--border-dim);
+    }
+    .terminal-prompt {
+      color: var(--neon-green);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    /* Projects / Cases Grid */
+    .section-action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      gap: 16px;
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .filter-pill {
+      background: var(--bg-panel-solid);
+      border: 1px solid var(--border-dim);
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-pill.active, .filter-pill:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: rgba(0, 240, 255, 0.08);
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 22px;
+    }
+    .project-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-dim);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .project-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 240, 255, 0.25);
+    }
+    .project-card.starred {
+      border-color: var(--amber);
+      box-shadow: 0 0 14px var(--amber-glow);
+    }
+    .project-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .case-code {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--cyan);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+    .badge-status {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .badge-status.solved {
+      background: rgba(0, 255, 102, 0.12);
+      border: 1px solid var(--neon-green);
+      color: var(--neon-green);
+    }
+    .badge-status.active {
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+    }
+    .badge-status.wip {
+      background: rgba(255, 170, 0, 0.12);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+    }
+    
+    .project-card h3 {
+      font-size: 1.55rem;
+      color: #fff;
+    }
+    .project-tagline {
+      color: var(--cyan);
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+    .project-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      flex: 1;
+    }
+    .project-tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .tech-tag {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-dim);
+      color: var(--text-muted);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .project-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-dim);
+      margin-top: 6px;
+    }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Agents Roster (The Squad) */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 22px;
+    }
+    .agent-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-dim);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      transition: all 0.3s;
+      overflow: hidden;
+    }
+    .agent-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), var(--glow-cyan);
+    }
+    .agent-card.commander-card {
+      border-color: rgba(0, 240, 255, 0.6);
+      background: linear-gradient(145deg, rgba(8, 20, 32, 0.9), rgba(4, 9, 15, 0.95));
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+    }
+    .agent-card.commander-card::before {
+      content: "★ COMMAND HQ ★";
+      position: absolute;
+      top: 0; right: 24px;
+      background: var(--cyan);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 0 0 6px 6px;
+      letter-spacing: 0.08em;
+    }
+    .agent-top-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .agent-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 12px;
+      border: 2px solid var(--cyan);
+      background: rgba(0, 240, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--cyan);
+      box-shadow: inset 0 0 12px rgba(0, 240, 255, 0.3);
+      position: relative;
+    }
+    .agent-avatar .badge-dot {
+      position: absolute;
+      bottom: -3px;
+      right: -3px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--neon-green);
+      border: 2px solid var(--bg-dark);
+      box-shadow: 0 0 8px var(--neon-green);
+    }
+    .agent-meta {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .agent-callsign {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--cyan);
+      letter-spacing: 0.12em;
+    }
+    .agent-name {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .agent-rank {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--amber);
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .agent-details-table {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 6px 12px;
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-dim);
+    }
+    .agent-details-table dt {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .agent-details-table dd {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    /* Modal / Dossier / Add Project Sheet */
+    .cyber-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(2, 6, 12, 0.85);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .cyber-modal.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-box {
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg-panel-solid);
+      border: 1px solid var(--cyan);
+      border-radius: 16px;
+      box-shadow: var(--glow-cyan);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-dim);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .modal-close-btn:hover {
+      border-color: var(--crimson);
+      color: var(--crimson);
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+      background: #040911;
+      border: 1px solid var(--border-dim);
+      border-radius: 8px;
+      color: var(--text-main);
+      padding: 10px 14px;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Floating Toast */
+    .cyber-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1200;
+      background: #09131e;
+      border: 1px solid var(--cyan);
+      box-shadow: var(--glow-cyan);
+      color: var(--text-main);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      pointer-events: none;
+    }
+    .cyber-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-dim);
+      background: #020509;
+      padding-block: 40px;
+      margin-top: 60px;
+    }
+    .footer-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+    }
+
+    /* Responsive */
+    @media (min-width: 900px) {
+      .nav-links { display: flex; }
+      .hero-grid { grid-template-columns: 1.2fr 0.8fr; }
+      .sec-header { flex-direction: row; justify-content: space-between; align-items: flex-end; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Matrix Rain Canvas Background -->
+  <canvas id="matrix-canvas"></canvas>
+  <div class="cyber-grid"></div>
+  <div class="scanlines" id="scanlines"></div>
+
+  <div class="app-shell">
+    
+    <!-- Top Navigation Header -->
+    <header class="top-bar">
+      <div class="wrap">
+          <a href="#home" class="brand-logo" aria-label="Bug Finders Commanders Home">
+          <svg class="shield-icon" viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+          <span class="glitch" data-text="BUG FINDERS COMMANDERS">BUG FINDERS COMMANDERS</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Tactical Navigation">
+          <a href="#home">Commanders HQ</a>
+          <a href="#terminal">Terminal</a>
+          <a href="#projects">Operations & Cases</a>
+          <a href="#agents">Roster</a>
+          <a href="#analytics">Threat Intel</a>
+        </nav>
+
+        <div class="top-actions">
+          <button class="cyber-btn-sm" id="btn-audio" title="Toggle Cyber Audio Synthesizer">
+            <span id="audio-icon">🔊</span> <span id="audio-label">FX: ON</span>
+          </button>
+          <button class="cyber-btn-sm" id="btn-crt" title="Toggle CRT Scanline Filter">
+            CRT
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero Section -->
+      <section class="hero-section" id="home">
+        <div class="wrap">
+          <div class="hero-grid">
+            <div class="hero-intel">
+              <div class="status-badge-row">
+                <span class="status-badge">
+                  <span class="pulse-dot"></span>
+                  DEFCON 1 // OPERATIONAL
+                </span>
+                <span class="status-badge">
+                  HQ CLOCK: <strong id="clock-display" style="margin-left:4px">--:--:--</strong>
+                </span>
+                <span class="status-badge">
+                  SESSION ID: <strong id="session-tag" style="margin-left:4px">BF-ALPHA</strong>
+                </span>
+              </div>
+
+              <div class="eyebrow">IIT BHUBANESWAR // SPECIAL OPERATIONS SQUAD</div>
+              
+              <h1 class="hero-title">
+                BUG FINDERS
+                <span class="highlight">// COMMANDERS CYBER TERMINAL</span>
+              </h1>
+
+              <p class="hero-desc">
+                Elite tactical engineering squadron building resilient architectures, rapid hackathon prototypes, and high-security systems. Under direct command of Commander Piyush Kumar Dey and Deputy Commander Kunal Kumar.
+              </p>
+
+              <div style="display:flex; flex-wrap:wrap; gap:14px; margin-top:10px;">
+                <a href="#terminal" class="btn btn-primary">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                  Access Terminal
+                </a>
+                <a href="#projects" class="btn btn-outline">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                  Explore Case Files
+                </a>
+                <button class="btn btn-accent" id="btn-quick-add-proj">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  + Add New Project
+                </button>
+              </div>
+            </div>
+
+            <!-- Telemetry Radar HUD -->
+            <div class="radar-card">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span class="eyebrow">TACTICAL RADAR TELEMETRY</span>
+                <span class="mono" style="font-size:0.75rem; color:var(--neon-green)">NETWORK ENCRYPTED</span>
+              </div>
+              <div class="radar-screen">
+                <div class="radar-sweep"></div>
+                <div class="radar-hud-point" style="top:32%; left:44%;"></div>
+                <div class="radar-hud-point" style="top:65%; left:70%; background:var(--amber); box-shadow:0 0 10px var(--amber)"></div>
+                <div class="radar-hud-point" style="top:48%; left:28%;"></div>
+                <div class="mono" style="font-size:0.75rem; color:var(--cyan); z-index:2; text-shadow:0 0 8px #000;">
+                  IIT BBS NODE ACTIVE
+                </div>
+              </div>
+              <div class="radar-stats-grid">
+                <div class="radar-stat-box">
+                  <div class="label">Squad Operatives</div>
+                  <div class="val" id="stat-agents-count">7 ACTIVE</div>
+                </div>
+                <div class="radar-stat-box">
+                  <div class="label">Live Deployments</div>
+                  <div class="val" id="stat-cases-count">3 DEPLOYED</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Metrics Counter Row -->
+          <div class="metrics-bar">
+            <div class="metric-card">
+              <span class="title">TOTAL OPERATIONS</span>
+              <span class="count" id="dash-total-ops">3</span>
+              <span class="sub">Production & Hackathon Builds</span>
+            </div>
+            <div class="metric-card">
+              <span class="title">COMMAND CLEARANCE</span>
+              <span class="count" style="color:var(--neon-green)">ALPHA-1</span>
+              <span class="sub">Commander & Deputy Leadership</span>
+            </div>
+            <div class="metric-card">
+              <span class="title">SQUAD INTEGRITY</span>
+              <span class="count" style="color:var(--amber)">100%</span>
+              <span class="sub">All Units Deployed & Ready</span>
+            </div>
+            <div class="metric-card">
+              <span class="title">SUCCESS RATE</span>
+              <span class="count">98.4%</span>
+              <span class="sub">Zero Critical Vulnerabilities</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Terminal Command Console -->
+      <section id="terminal">
+        <div class="wrap">
+          <div class="sec-header">
+            <div>
+              <div class="eyebrow">ROOT SHELL ACCESS</div>
+              <h2>CYBER COMMAND CONSOLE</h2>
+              <p>Execute tactical terminal directives, run vulnerability diagnostics, deploy projects, and inspect classified intelligence.</p>
+            </div>
+          </div>
+
+          <div class="terminal-container">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="d-red"></span>
+                <span class="d-yellow"></span>
+                <span class="d-green"></span>
+              </div>
+              <div class="terminal-title">piyush@bugfinders-hq: /secure/ops (bash)</div>
+              <div class="terminal-actions">
+                <button class="cyber-btn-sm" id="btn-clear-term">CLEAR</button>
+                <button class="cyber-btn-sm" id="btn-copy-term">COPY LOG</button>
+              </div>
+            </div>
+
+            <div class="terminal-body" id="term-body" tabindex="0">
+              <!-- Initial boot messages loaded via JS -->
+            </div>
+
+            <!-- Quick Command Chips -->
+            <div class="terminal-quick-bar">
+              <button class="quick-chip" data-cmd="help">HELP</button>
+              <button class="quick-chip" data-cmd="team">TEAM</button>
+              <button class="quick-chip" data-cmd="projects">PROJECTS</button>
+              <button class="quick-chip" data-cmd="addproject">+ ADD PROJECT</button>
+              <button class="quick-chip" data-cmd="questforge">QUESTFORGE</button>
+              <button class="quick-chip" data-cmd="unify">UNIFY</button>
+              <button class="quick-chip" data-cmd="scan">SCAN NETWORK</button>
+              <button class="quick-chip" data-cmd="decrypt">DECRYPT</button>
+              <button class="quick-chip" data-cmd="matrix">TOGGLE MATRIX</button>
+              <button class="quick-chip" data-cmd="deploy">DEPLOY INFO</button>
+              <button class="quick-chip" data-cmd="clear">CLEAR</button>
+            </div>
+
+            <form class="terminal-input-bar" id="term-form">
+              <div class="terminal-prompt">
+                <span>root@bugfinders:~#</span>
+              </div>
+              <input type="text" id="term-input" class="terminal-input" placeholder="Enter directive (e.g. 'help', 'team', 'projects', 'scan')..." autocomplete="off" spellcheck="false">
+              <button type="submit" class="cyber-btn-sm" style="background:var(--cyan); color:#000; font-weight:bold;">EXECUTE</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects & Case Database -->
+      <section id="projects">
+        <div class="wrap">
+          <div class="sec-header">
+            <div>
+              <div class="eyebrow">DATABASE OF OPERATIONS</div>
+              <h2>CASE FILES & PROJECTS</h2>
+              <p>Explore production repositories, hackathon solutions, and tactical applications built by Bug Finders.</p>
+            </div>
+            <div>
+              <button class="btn btn-accent" id="btn-add-case-modal">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Deploy New Project
+              </button>
+            </div>
+          </div>
+
+          <div class="section-action-bar">
+            <div class="filter-pills" id="proj-filter-pills">
+              <button class="filter-pill active" data-filter="all">ALL OPERATIONS</button>
+              <button class="filter-pill" data-filter="hackathon">HACKATHON BUILDS</button>
+              <button class="filter-pill" data-filter="production">CAMPUS & SYSTEM OS</button>
+              <button class="filter-pill" data-filter="starred">STARRED / FLAGGED</button>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="cyber-btn-sm" id="btn-export-data">EXPORT JSON</button>
+              <button class="cyber-btn-sm" id="btn-reset-data" title="Restore default cases">RESET CASES</button>
+            </div>
+          </div>
+
+          <div class="projects-grid" id="projects-container">
+            <!-- Dynamically populated from JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Agent Database / Squad Roster -->
+      <section id="agents">
+        <div class="wrap">
+          <div class="sec-header">
+            <div>
+              <div class="eyebrow">PERSONNEL INTEL</div>
+              <h2>TACTICAL SQUAD ROSTER</h2>
+              <p>Official command chain, divisional operatives, and specialized intelligence units of Team BUG FINDERS.</p>
+            </div>
+          </div>
+
+          <div class="agents-grid" id="agents-container">
+            <!-- Dynamically populated from JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Threat Analytics Section -->
+      <section id="analytics">
+        <div class="wrap">
+          <div class="sec-header">
+            <div>
+              <div class="eyebrow">LIVE METRICS & INTEL</div>
+              <h2>SECURITY & CODEBASE TELEMETRY</h2>
+              <p>Real-time system diagnostics, test coverage distributions, and deployment status.</p>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:24px;">
+            <div style="background:var(--bg-panel); border:1px solid var(--border-dim); border-radius:14px; padding:24px;">
+              <h3 style="margin-bottom:16px; font-size:1.2rem; color:var(--cyan);">Squad Divisional Distribution</h3>
+              <div style="display:flex; flex-direction:column; gap:12px;" class="mono">
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
+                    <span>COMMAND & CORE ARCHITECTURE</span>
+                    <span style="color:var(--cyan)">28% (2 Ops)</span>
+                  </div>
+                  <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
+                    <div style="width:28%; height:100%; background:var(--cyan); box-shadow:0 0 8px var(--cyan);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
+                    <span>VOICE INTELLIGENCE UNIT (VIU)</span>
+                    <span style="color:var(--neon-green)">28% (2 Ops)</span>
+                  </div>
+                  <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
+                    <div style="width:28%; height:100%; background:var(--neon-green); box-shadow:0 0 8px var(--neon-green);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
+                    <span>CONTENT OPERATIONS</span>
+                    <span style="color:var(--amber)">14% (1 Op)</span>
+                  </div>
+                  <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
+                    <div style="width:14%; height:100%; background:var(--amber);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
+                    <span>PRESENTATION & PR</span>
+                    <span style="color:var(--purple)">14% (1 Op)</span>
+                  </div>
+                  <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
+                    <div style="width:14%; height:100%; background:var(--purple);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
+                    <span>FIELD OPERATIONS</span>
+                    <span style="color:var(--crimson)">16% (1 Op)</span>
+                  </div>
+                  <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
+                    <div style="width:16%; height:100%; background:var(--crimson);"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background:var(--bg-panel); border:1px solid var(--border-dim); border-radius:14px; padding:24px;">
+              <h3 style="margin-bottom:16px; font-size:1.2rem; color:var(--cyan);">System Diagnostic Status</h3>
+              <div class="mono" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:0.9rem;">
+                <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
+                  <div style="color:var(--text-dim); font-size:0.75rem;">UPTIME</div>
+                  <div style="color:var(--neon-green); font-size:1.3rem; font-weight:bold; margin-top:4px;">99.98%</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
+                  <div style="color:var(--text-dim); font-size:0.75rem;">FIREWALL</div>
+                  <div style="color:var(--cyan); font-size:1.3rem; font-weight:bold; margin-top:4px;">ENFORCED</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
+                  <div style="color:var(--text-dim); font-size:0.75rem;">DEPLOYMENT</div>
+                  <div style="color:var(--neon-green); font-size:1.3rem; font-weight:bold; margin-top:4px;">NETLIFY LIVE</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.4); padding:14px; border-radius:8px; border:1px solid var(--border-dim)">
+                  <div style="color:var(--text-dim); font-size:0.75rem;">SSL / TLS</div>
+                  <div style="color:var(--cyan); font-size:1.3rem; font-weight:bold; margin-top:4px;">SHA-256</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="wrap footer-grid">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 2L3 7v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V7l-9-5z"/></svg>
+          <span style="font-family:var(--font-display); font-size:1.1rem; font-weight:700; color:#fff;">TEAM BUG FINDERS COMMANDERS // IIT BHUBANESWAR</span>
+        </div>
+        <p class="mono" style="color:var(--text-muted); font-size:0.85rem;">
+          Commanders Architecture directed by Commander Piyush Kumar Dey (Leader) & Deputy Commander Kunal Kumar (Deputy Leader). All Rights Reserved.
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Modal: Add New Project / Case File -->
+  <div class="cyber-modal" id="modal-add-project" role="dialog" aria-modal="true" aria-labelledby="modal-add-title">
+    <div class="modal-box">
+      <button class="modal-close-btn" id="btn-close-add-modal" aria-label="Close dialog">&times;</button>
+      <div class="eyebrow">NEW OPERATION INITIALIZATION</div>
+      <h3 id="modal-add-title" style="color:#fff; font-size:1.6rem;">DEPLOY NEW PROJECT TO DATABASE</h3>
+      
+      <form id="form-add-project" style="display:flex; flex-direction:column; gap:16px;">
+        <div class="form-group">
+          <label for="proj-name">Project Codename *</label>
+          <input type="text" id="proj-name" required placeholder="e.g. CyberGuard Sentinel, NeuroPulse">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label for="proj-case-code">Case Designation *</label>
+            <input type="text" id="proj-case-code" required placeholder="e.g. CASE-03, CASE-04">
+          </div>
+          <div class="form-group">
+            <label for="proj-category">Mission Category *</label>
+            <select id="proj-category">
+              <option value="hackathon">Hackathon Build</option>
+              <option value="production">Campus & System OS</option>
+              <option value="cyber">Cyber Security / Tooling</option>
+              <option value="ai">AI / Autonomous Agent</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="proj-tagline">Tactical Tagline *</label>
+          <input type="text" id="proj-tagline" required placeholder="e.g. Real-time Threat Intelligence Engine">
+        </div>
+
+        <div class="form-group">
+          <label for="proj-summary">Operational Summary *</label>
+          <textarea id="proj-summary" rows="3" required placeholder="Describe what the system does, key features, and problem statement..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="proj-tech">Tech Stack (comma separated)</label>
+          <input type="text" id="proj-tech" placeholder="e.g. React, Node.js, WebSockets, Python, Docker">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label for="proj-demo-url">Live Deployment URL</label>
+            <input type="url" id="proj-demo-url" placeholder="https://your-demo.netlify.app">
+          </div>
+          <div class="form-group">
+            <label for="proj-github-url">GitHub Repository URL</label>
+            <input type="url" id="proj-github-url" placeholder="https://github.com/bugfinders/...">
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+          <button type="button" class="btn btn-outline" id="btn-cancel-add-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save & Register Case</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Dossier Viewer -->
+  <div class="cyber-modal" id="modal-dossier" role="dialog" aria-modal="true" aria-labelledby="dossier-title">
+    <div class="modal-box">
+      <button class="modal-close-btn" id="btn-close-dossier-modal" aria-label="Close dialog">&times;</button>
+      <div id="dossier-content">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div class="cyber-toast" id="toast-notify" role="status" aria-live="polite"></div>
+
+  <!-- Application Logic -->
+  <script>
+    (function () {
+      "use strict";
+
+      /* ================= AUDIO SYNTHESIZER (Web Audio API) ================= */
+      var audioEnabled = true;
+      var audioCtx = null;
+
+      function getAudioContext() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        return audioCtx;
+      }
+
+      function playSound(type) {
+        if (!audioEnabled) return;
+        try {
+          var ctx = getAudioContext();
+          var osc = ctx.createOscillator();
+          var gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          var now = ctx.currentTime;
+
+          if (type === 'beep') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, now);
+            osc.frequency.exponentialRampToValueAtTime(440, now + 0.08);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.08);
+          } else if (type === 'cmd') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(520, now);
+            osc.frequency.exponentialRampToValueAtTime(1040, now + 0.12);
+            gain.gain.setValueAtTime(0.09, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            osc.start(now);
+            osc.stop(now + 0.12);
+          } else if (type === 'alert') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(320, now);
+            osc.frequency.setValueAtTime(640, now + 0.08);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            osc.start(now);
+            osc.stop(now + 0.2);
+          } else if (type === 'granted') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, now);
+            osc.frequency.setValueAtTime(554.37, now + 0.06);
+            osc.frequency.setValueAtTime(659.25, now + 0.12);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+            osc.start(now);
+            osc.stop(now + 0.25);
+          }
+        } catch (e) {
+          // Audio context might be blocked until user gesture
+        }
+      }
+
+      var btnAudio = document.getElementById('btn-audio');
+      btnAudio.addEventListener('click', function () {
+        audioEnabled = !audioEnabled;
+        document.getElementById('audio-label').textContent = audioEnabled ? 'FX: ON' : 'FX: OFF';
+        document.getElementById('audio-icon').textContent = audioEnabled ? '🔊' : '🔇';
+        if (audioEnabled) playSound('granted');
+        showToast(audioEnabled ? 'Cyber Synthesizer Audio Enabled' : 'Cyber Audio Muted');
+      });
+
+      /* CRT Scanlines Toggle */
+      var btnCrt = document.getElementById('btn-crt');
+      var scanlines = document.getElementById('scanlines');
+      btnCrt.addEventListener('click', function () {
+        scanlines.classList.toggle('off');
+        playSound('beep');
+        showToast(scanlines.classList.contains('off') ? 'CRT Scanlines Disabled' : 'CRT Scanlines Active');
+      });
+
+      /* ================= MATRIX RAIN CANVAS ================= */
+      var canvas = document.getElementById('matrix-canvas');
+      var ctx = canvas.getContext('2d');
+      var matrixActive = true;
+      var matrixChars = "010101010101ABCDEFGHIJKLMNOPQRSTUVWXYZアイウエオカキクケコサシスセソタチツテト0123456789{}[]<>$#%&*+-";
+      var fontSize = 14;
+      var columns = 0;
+      var drops = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        columns = Math.floor(canvas.width / fontSize);
+        drops = [];
+        for (var i = 0; i < columns; i++) {
+          drops[i] = Math.floor(Math.random() * -canvas.height / fontSize);
+        }
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      function drawMatrix() {
+        if (!matrixActive) return;
+        ctx.fillStyle = "rgba(3, 7, 13, 0.08)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#00f0ff";
+        ctx.font = fontSize + "px 'JetBrains Mono', monospace";
+
+        for (var i = 0; i < drops.length; i++) {
+          var char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+          var x = i * fontSize;
+          var y = drops[i] * fontSize;
+
+          // Occasionally paint brighter cyan or neon green head
+          if (Math.random() > 0.85) {
+            ctx.fillStyle = "#ffffff";
+          } else if (Math.random() > 0.6) {
+            ctx.fillStyle = "#00ff66";
+          } else {
+            ctx.fillStyle = "#00f0ff";
+          }
+
+          ctx.fillText(char, x, y);
+
+          if (y > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+      setInterval(drawMatrix, 45);
+
+      /* ================= DATA REPOSITORY ================= */
+      /* OFFICIAL SQUAD ROSTER */
+      var SQUAD = [
+        {
+          id: "BF-001",
+          name: "Piyush Kumar Dey",
+          rank: "Commander",
+          role: "Mission Leader & Core Architect",
+          unit: "Strategic Command & Architecture",
+          status: "Operational",
+          clearance: "Level 5 [Alpha Command]",
+          specialization: "Full-Stack Security, High-Performance Systems, Team Direction",
+          assigned: "QuestForge & UNIFY Architecture",
+          bio: "Founding Commander of Team Bug Finders. Directs end-to-end tactical engineering, mission roadmap, and security paradigms."
+        },
+        {
+          id: "BF-002",
+          name: "Kunal Kumar",
+          rank: "Deputy Commander",
+          role: "Deputy Leader & Core Systems",
+          unit: "Executive Command & Backend Engineering",
+          status: "Operational",
+          clearance: "Level 4 [Beta Executive]",
+          specialization: "Distributed Architecture, API Design, Reliability Engineering",
+          assigned: "UNIFY Super-App Core & Database Security",
+          bio: "Deputy Commander overseeing backend resilience, high-concurrency protocols, and technical execution across operations."
+        },
+        {
+          id: "BF-003",
+          name: "Shiv Kumar Sahoo",
+          rank: "Content Operations Lead",
+          role: "Editor & Technical Documentation",
+          unit: "Content Operations & Intel Dissemination",
+          status: "Operational",
+          clearance: "Level 3 [Operational]",
+          specialization: "Code Review, Editorial Integrity, System Documentation, Tech Briefs",
+          assigned: "Mission Dossiers & Knowledge Base",
+          bio: "Leads technical content operations and architecture documentation ensuring impeccable clarity and accuracy in every release."
+        },
+        {
+          id: "BF-004",
+          name: "Prangya Smita Mallick",
+          rank: "Voice Intelligence Operative",
+          role: "Voice Artist & Acoustic Comms",
+          unit: "Voice Intelligence Unit (VIU)",
+          status: "Operational",
+          clearance: "Level 3 [Specialist]",
+          specialization: "Acoustic Intelligence, Voiceover Production, Pitch & Narrative Delivery",
+          assigned: "QuestForge Audio Narratives & Demo Intelligence",
+          bio: "Pioneers the Voice Intelligence Unit, crafting immersive vocal experiences and acoustic assets for user interfaces and mission showcases."
+        },
+        {
+          id: "BF-005",
+          name: "Abhipsa Sahoo",
+          rank: "Presentation Specialist",
+          role: "Lead Presenter & Product Demo Strategist",
+          unit: "Presentation & Public Relations Unit",
+          status: "Operational",
+          clearance: "Level 3 [Specialist]",
+          specialization: "Executive Keynotes, Live Demonstration Flow, Storytelling & Jury Pitching",
+          assigned: "Hackathon Stage Demos & Product Walkthroughs",
+          bio: "Master of public presentation and pitch architecture, translating complex cyber architectures into compelling judge-winning showcases."
+        },
+        {
+          id: "BF-006",
+          name: "Shakti Prasad Sahoo",
+          rank: "Field Operations Specialist",
+          role: "Tactical Dealer & Field Liaison",
+          unit: "Field Operations & Logistics Unit",
+          status: "Operational",
+          clearance: "Level 3 [Specialist]",
+          specialization: "Field Logistics, Tactical Negotiations, Deployment Coordination ('The Dealer')",
+          assigned: "Live Operations & Hardware Interfacing",
+          bio: "Elite field operator managing tactical resources, external integrations, and real-time operational troubleshooting on the ground."
+        },
+        {
+          id: "BF-007",
+          name: "Md Farhan Khan",
+          rank: "Voice Intelligence Operative",
+          role: "Voice Artist & Media Production",
+          unit: "Voice Intelligence Unit (VIU)",
+          status: "Operational",
+          clearance: "Level 3 [Specialist]",
+          specialization: "Audio Mastering, Vocal Dynamics, Explainer Production & Sound Design",
+          assigned: "Demonstration Video Audio & Teaser Releases",
+          bio: "Co-pilots the Voice Intelligence Unit, bringing crisp vocal narration, audio editing, and sound design to tactical project demonstrations."
+        }
+      ];
+
+      /* INITIAL CASE FILES */
+      var DEFAULT_CASES = [
+        {
+          id: "questforge",
+          caseCode: "CASE-01",
+          name: "QuestForge",
+          fullName: "QuestForge — Realm of Habit",
+          category: "hackathon",
+          tagline: "Gamified Habit Formation & Life RPG Engine",
+          status: "Solved",
+          starred: true,
+          summary: "A gamified productivity and behavioral tracking engine. Daily real-world habits transform into quest expeditions where users level up attributes, earn XP, maintain streaks, and trade within an in-game economy. Built in a grueling 24-hour sprint at IIT Bhubaneswar.",
+          tech: ["React", "Node.js", "PostgreSQL", "WebSockets", "TailwindCSS"],
+          points: [
+            "Experience points (XP), levels, and streaks incentivize unwavering habit consistency.",
+            "Dynamic RPG attribute growth tailored to fitness, coding, knowledge, and mindfulness habits.",
+            "Virtual economy allowing players to unlock tactical equipment and gear with earned XP.",
+            "Secure session authentication backed by relational schema storing user character data.",
+            "Constructed within 24 hours for the Life RPG Problem Statement."
+          ],
+          demoUrl: "https://questforge-life-rpg.netlify.app",
+          githubUrl: "https://github.com/piyush77777777777/questforge"
+        },
+        {
+          id: "unify",
+          caseCode: "CASE-02",
+          name: "UNIFY",
+          fullName: "UNIFY — Decentralized Campus Operating System",
+          category: "production",
+          tagline: "Unified Multi-Service Campus & Student Portal",
+          status: "Active",
+          starred: true,
+          summary: "Comprehensive next-generation campus portal integrating 60+ modular academic, administrative, and hostel life services into one cohesive, lightning-fast web terminal. Features end-to-end security, instant event feeds, and student resource management.",
+          tech: ["TypeScript", "Next.js", "Express", "MongoDB", "Redis", "Docker"],
+          points: [
+            "Over 60 dedicated campus micro-services orchestrated under a single resilient portal.",
+            "Role-Based Access Control (RBAC) covering Students, Faculty, Administrators, and Security.",
+            "Real-time event notification pipeline powered by Redis Pub/Sub.",
+            "Complete architecture blueprint and micro-service mind map deployed in production."
+          ],
+          demoUrl: "https://unify-campus-portal.netlify.app",
+          githubUrl: "https://github.com/piyush77777777777/unify-campus-portal"
+        },
+        {
+          id: "cyberguard",
+          caseCode: "CASE-03",
+          name: "CyberGuard Sentinel",
+          fullName: "CyberGuard Sentinel — AI Network Threat Hunter",
+          category: "cyber",
+          tagline: "Autonomous Vulnerability Scanner & Packet Inspector",
+          status: "Active",
+          starred: false,
+          summary: "Automated vulnerability scanner and endpoint telemetry inspector designed to discover anomalous packet signatures, misconfigured CORS headers, and open ports across campus infrastructure.",
+          tech: ["Python", "Go", "FastAPI", "Scapy", "SQLite"],
+          points: [
+            "Real-time heuristic threat detection checking packet streams against zero-day CVE catalogs.",
+            "Automated SSL/TLS cipher audit and HTTP security header compliance scoring.",
+            "Interactive topological network graph displaying active nodes and vulnerabilities."
+          ],
+          demoUrl: "https://cyberguard-sentinel.netlify.app",
+          githubUrl: "https://github.com/bugfinders/cyberguard-sentinel"
+        }
+      ];
+
+      /* Storage initialization */
+      var currentCases = [];
+      try {
+        var saved = localStorage.getItem("bf_custom_cases_v2");
+        if (saved) {
+          currentCases = JSON.parse(saved);
+        } else {
+          currentCases = DEFAULT_CASES;
+          localStorage.setItem("bf_custom_cases_v2", JSON.stringify(currentCases));
+        }
+      } catch (e) {
+        currentCases = DEFAULT_CASES;
+      }
+
+      function saveCases() {
+        try {
+          localStorage.setItem("bf_custom_cases_v2", JSON.stringify(currentCases));
+        } catch (e) {
+          console.error("Storage error:", e);
+        }
+        renderCases();
+        updateStats();
+      }
+
+      /* Helpers */
+      function esc(s) {
+        return String(s || "").replace(/[&<>"]/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+        });
+      }
+
+      var toastTimer = null;
+      function showToast(msg) {
+        var el = document.getElementById("toast-notify");
+        el.textContent = msg;
+        el.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          el.classList.remove("show");
+        }, 3200);
+      }
+
+      /* Header Clock */
+      function updateClock() {
+        var d = new Date();
+        document.getElementById('clock-display').textContent = d.toLocaleTimeString('en-GB');
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      /* ================= RENDER CASES / PROJECTS ================= */
+      var activeFilter = "all";
+
+      function renderCases() {
+        var container = document.getElementById("projects-container");
+        var filtered = currentCases.filter(function (c) {
+          if (activeFilter === "all") return true;
+          if (activeFilter === "starred") return !!c.starred;
+          return c.category === activeFilter;
+        });
+
+        if (filtered.length === 0) {
+          container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; border:1px dashed var(--border-dim); border-radius:12px; color:var(--text-muted); font-family:var(--font-mono);">' +
+            'No operations found under category "' + esc(activeFilter) + '". Click "+ Add New Project" to register one.' +
+            '</div>';
+          return;
+        }
+
+        container.innerHTML = filtered.map(function (c) {
+          var statusClass = c.status.toLowerCase() === "solved" ? "solved" : (c.status.toLowerCase() === "active" ? "active" : "wip");
+          var starLabel = c.starred ? "★ Flagged" : "☆ Flag";
+          var techHtml = (c.tech || []).map(function (t) {
+            return '<span class="tech-tag">' + esc(t) + '</span>';
+          }).join("");
+
+          var demoBtn = c.demoUrl ? '<a href="' + esc(c.demoUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm" style="color:var(--neon-green); border-color:rgba(0,255,102,0.3)">Live Web</a>' : '';
+          var ghBtn = c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm">Repo</a>' : '';
+
+          return '<article class="project-card ' + (c.starred ? 'starred' : '') + '" data-id="' + esc(c.id) + '">' +
+            '<div class="project-card-header">' +
+              '<span class="case-code">' + esc(c.caseCode) + '</span>' +
+              '<span class="badge-status ' + statusClass + '">' + esc(c.status) + '</span>' +
+            '</div>' +
+            '<h3>' + esc(c.name) + '</h3>' +
+            '<div class="project-tagline">' + esc(c.tagline) + '</div>' +
+            '<p class="project-desc">' + esc(c.summary) + '</p>' +
+            '<div class="project-tech-tags">' + techHtml + '</div>' +
+            '<div class="project-card-footer">' +
+              '<div class="card-actions">' +
+                '<button type="button" class="cyber-btn-sm btn-dossier" data-id="' + esc(c.id) + '">Dossier</button>' +
+                '<button type="button" class="cyber-btn-sm btn-star" data-id="' + esc(c.id) + '">' + starLabel + '</button>' +
+              '</div>' +
+              '<div style="display:flex; gap:6px;">' + demoBtn + ghBtn + '</div>' +
+            '</div>' +
+          '</article>';
+        }).join("");
+
+        // Attach event listeners for card buttons
+        var dossierBtns = container.querySelectorAll('.btn-dossier');
+        dossierBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            playSound('beep');
+            openCaseDossier(btn.getAttribute('data-id'));
+          });
+        });
+
+        var starBtns = container.querySelectorAll('.btn-star');
+        starBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            playSound('beep');
+            toggleStarCase(btn.getAttribute('data-id'));
+          });
+        });
+      }
+
+      function toggleStarCase(id) {
+        var found = currentCases.find(function (c) { return c.id === id; });
+        if (found) {
+          found.starred = !found.starred;
+          saveCases();
+          showToast((found.starred ? 'Flagged Operation: ' : 'Unflagged Operation: ') + found.name);
+        }
+      }
+
+      function openCaseDossier(id) {
+        var c = currentCases.find(function (item) { return item.id === id; });
+        if (!c) return;
+        var modal = document.getElementById("modal-dossier");
+        var content = document.getElementById("dossier-content");
+
+        var pointsList = (c.points || []).map(function (p) {
+          return '<li style="margin-bottom:6px;">' + esc(p) + '</li>';
+        }).join("");
+
+        var techBadges = (c.tech || []).map(function (t) {
+          return '<span class="tech-tag" style="font-size:0.8rem;">' + esc(t) + '</span>';
+        }).join("");
+
+        content.innerHTML = '<div class="eyebrow">' + esc(c.caseCode) + ' // CLASSIFIED DOSSIER</div>' +
+          '<h2 style="color:#fff; font-size:1.9rem; margin-top:4px;">' + esc(c.fullName || c.name) + '</h2>' +
+          '<div style="color:var(--cyan); font-weight:600; font-size:1.1rem; margin-top:4px;">' + esc(c.tagline) + '</div>' +
+          '<div style="background:rgba(0,0,0,0.4); border:1px solid var(--border-dim); border-radius:10px; padding:16px; margin-top:14px;">' +
+            '<div class="mono" style="font-size:0.8rem; color:var(--text-dim); text-transform:uppercase; margin-bottom:4px;">Operational Synopsis</div>' +
+            '<p style="color:var(--text-main); font-size:1rem; line-height:1.6;">' + esc(c.summary) + '</p>' +
+          '</div>' +
+          '<div style="margin-top:16px;">' +
+            '<div class="mono" style="font-size:0.8rem; color:var(--cyan); text-transform:uppercase; margin-bottom:8px;">Core Architecture & Milestones</div>' +
+            '<ul style="padding-left:20px; color:var(--text-muted); font-size:0.95rem; line-height:1.6;">' + pointsList + '</ul>' +
+          '</div>' +
+          '<div style="margin-top:16px;">' +
+            '<div class="mono" style="font-size:0.8rem; color:var(--cyan); text-transform:uppercase; margin-bottom:8px;">Technology Stack</div>' +
+            '<div style="display:flex; flex-wrap:wrap; gap:8px;">' + techBadges + '</div>' +
+          '</div>' +
+          '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; padding-top:16px; border-top:1px solid var(--border-dim);">' +
+            (c.demoUrl ? '<a href="' + esc(c.demoUrl) + '" target="_blank" rel="noopener" class="btn btn-primary">Open Live Deployment</a>' : '') +
+            (c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="btn btn-outline">Inspect GitHub Codebase</a>' : '') +
+            '<button type="button" class="btn btn-outline" id="btn-delete-case-modal" style="color:var(--crimson); border-color:rgba(255,0,85,0.4);">Delete Case</button>' +
+          '</div>';
+
+        modal.classList.add("open");
+
+        var delBtn = document.getElementById('btn-delete-case-modal');
+        if (delBtn) {
+          delBtn.onclick = function () {
+            if (confirm("Are you sure you want to permanently delete case file " + c.name + "?")) {
+              currentCases = currentCases.filter(function (item) { return item.id !== c.id; });
+              saveCases();
+              modal.classList.remove("open");
+              showToast("Case Deleted: " + c.name);
+            }
+          };
+        }
+      }
+
+      /* Filter pills */
+      var filterContainer = document.getElementById("proj-filter-pills");
+      filterContainer.addEventListener("click", function (e) {
+        var btn = e.target.closest(".filter-pill");
+        if (!btn) return;
+        filterContainer.querySelectorAll(".filter-pill").forEach(function (p) { p.classList.remove("active"); });
+        btn.classList.add("active");
+        activeFilter = btn.getAttribute("data-filter");
+        playSound('beep');
+        renderCases();
+      });
+
+      /* ================= RENDER SQUAD ROSTER ================= */
+      function renderSquad() {
+        var container = document.getElementById("agents-container");
+        container.innerHTML = SQUAD.map(function (a) {
+          var isLeader = a.id === "BF-001";
+          var isDeputy = a.id === "BF-002";
+
+          return '<article class="agent-card ' + (isLeader ? 'commander-card' : '') + '">' +
+            '<div class="agent-top-row">' +
+              '<div class="agent-avatar">' +
+                a.name[0] +
+                '<span class="badge-dot"></span>' +
+              '</div>' +
+              '<div class="agent-meta">' +
+                '<span class="agent-callsign">' + esc(a.id) + ' // ' + esc(a.status) + '</span>' +
+                '<h3 class="agent-name">' + esc(a.name) + '</h3>' +
+                '<span class="agent-rank">' + esc(a.rank) + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<dl class="agent-details-table">' +
+              '<dt>Unit</dt><dd>' + esc(a.unit) + '</dd>' +
+              '<dt>Role</dt><dd>' + esc(a.role) + '</dd>' +
+              '<dt>Clearance</dt><dd class="mono" style="color:var(--cyan)">' + esc(a.clearance) + '</dd>' +
+              '<dt>Specialty</dt><dd>' + esc(a.specialization) + '</dd>' +
+            '</dl>' +
+            '<div style="font-size:0.88rem; color:var(--text-muted); line-height:1.5;">' + esc(a.bio) + '</div>' +
+            '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:10px; border-top:1px solid var(--border-dim);">' +
+              '<span class="mono" style="font-size:0.75rem; color:var(--amber);">Assigned: ' + esc(a.assigned) + '</span>' +
+              '<button type="button" class="cyber-btn-sm btn-agent-contact" data-name="' + esc(a.name) + '">Comms</button>' +
+            '</div>' +
+          '</article>';
+        }).join("");
+
+        container.querySelectorAll('.btn-agent-contact').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            playSound('cmd');
+            var name = btn.getAttribute('data-name');
+            showToast('Encrypted comms link established with ' + name);
+          });
+        });
+      }
+
+      /* Update Statistics */
+      function updateStats() {
+        document.getElementById('stat-cases-count').textContent = currentCases.length + ' DEPLOYED';
+        document.getElementById('dash-total-ops').textContent = currentCases.length;
+        document.getElementById('stat-agents-count').textContent = SQUAD.length + ' ACTIVE';
+      }
+
+      /* ================= ADD PROJECT MODAL & EXPORT ================= */
+      var modalAdd = document.getElementById("modal-add-project");
+      var btnOpenAdd = document.getElementById("btn-add-case-modal");
+      var btnQuickAdd = document.getElementById("btn-quick-add-proj");
+      var btnCloseAdd = document.getElementById("btn-close-add-modal");
+      var btnCancelAdd = document.getElementById("btn-cancel-add-modal");
+      var formAdd = document.getElementById("form-add-project");
+
+      function openAddModal() {
+        playSound('beep');
+        modalAdd.classList.add("open");
+        document.getElementById("proj-name").focus();
+        // Prefill default next case code
+        var nextNum = currentCases.length + 1;
+        document.getElementById("proj-case-code").value = "CASE-0" + nextNum;
+      }
+      function closeAddModal() {
+        modalAdd.classList.remove("open");
+      }
+
+      btnOpenAdd.addEventListener("click", openAddModal);
+      btnQuickAdd.addEventListener("click", openAddModal);
+      btnCloseAdd.addEventListener("click", closeAddModal);
+      btnCancelAdd.addEventListener("click", closeAddModal);
+
+      // Close Dossier modal
+      var modalDossier = document.getElementById("modal-dossier");
+      document.getElementById("btn-close-dossier-modal").addEventListener("click", function () {
+        modalDossier.classList.remove("open");
+      });
+
+      // Handle add project submission
+      formAdd.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var name = document.getElementById("proj-name").value.trim();
+        var code = document.getElementById("proj-case-code").value.trim();
+        var category = document.getElementById("proj-category").value;
+        var tagline = document.getElementById("proj-tagline").value.trim();
+        var summary = document.getElementById("proj-summary").value.trim();
+        var techRaw = document.getElementById("proj-tech").value.trim();
+        var demoUrl = document.getElementById("proj-demo-url").value.trim();
+        var githubUrl = document.getElementById("proj-github-url").value.trim();
+
+        var techArray = techRaw ? techRaw.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : ["Web", "TypeScript"];
+        var id = name.toLowerCase().replace(/[^a-z0-9]/g, "-") + "-" + Date.now().toString(36);
+
+        var newCase = {
+          id: id,
+          caseCode: code || "CASE-0" + (currentCases.length + 1),
+          name: name,
+          fullName: name + " — " + tagline,
+          category: category,
+          tagline: tagline,
+          status: "Active",
+          starred: true,
+          summary: summary,
+          tech: techArray,
+          points: [
+            "Project architecture initialized by Team Bug Finders.",
+            "Fully deployed and registered in tactical database."
+          ],
+          demoUrl: demoUrl || "",
+          githubUrl: githubUrl || ""
+        };
+
+        currentCases.unshift(newCase);
+        saveCases();
+        formAdd.reset();
+        closeAddModal();
+        playSound('granted');
+        showToast("Operation Registered: " + name);
+
+        // Scroll to projects section
+        window.location.hash = "#projects";
+      });
+
+      // Export Data JSON
+      document.getElementById("btn-export-data").addEventListener("click", function () {
+        playSound('beep');
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentCases, null, 2));
+        var downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "bug_finders_projects.json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        showToast("Database exported as JSON");
+      });
+
+      // Reset default cases
+      document.getElementById("btn-reset-data").addEventListener("click", function () {
+        if (confirm("Reset case database back to original defaults?")) {
+          currentCases = DEFAULT_CASES;
+          saveCases();
+          playSound('alert');
+          showToast("Case database restored to default");
+        }
+      });
+
+      /* ================= TERMINAL ENGINE ================= */
+      var termBody = document.getElementById("term-body");
+      var termInput = document.getElementById("term-input");
+      var termForm = document.getElementById("term-form");
+      var termHistory = [];
+      var termHistoryIndex = -1;
+
+      function appendTerm(text, className) {
+        var row = document.createElement("div");
+        row.className = "t-row " + (className || "out");
+        row.textContent = text;
+        termBody.appendChild(row);
+        termBody.scrollTop = termBody.scrollHeight;
+      }
+
+      function bootTerminal() {
+        termBody.innerHTML = "";
+        appendTerm("==================================================================", "dim");
+        appendTerm(" BUG FINDERS COMMANDERS // V3.8 TACTICAL CORE", "cmd");
+        appendTerm(" Commander:        Piyush Kumar Dey [BF-001]", "accent");
+        appendTerm(" Deputy Commander: Kunal Kumar [BF-002]", "accent");
+        appendTerm(" Host: IIT Bhubaneswar Network (Autonomous Node)", "dim");
+        appendTerm(" Type 'help' for directory of operational commands.", "warn");
+        appendTerm("==================================================================", "dim");
+      }
+      bootTerminal();
+
+      var TERMINAL_COMMANDS = {
+        help: function () {
+          appendTerm("CLASSIFIED COMMAND DIRECTORY:", "cmd");
+          appendTerm("  help         - Display this tactical manual", "out");
+          appendTerm("  team / squad - Inspect Bug Finders personnel hierarchy", "out");
+          appendTerm("  projects     - List all registered cases and deployments", "out");
+          appendTerm("  addproject   - Launch wizard to register a new project", "out");
+          appendTerm("  questforge   - Access Case-01: QuestForge habit RPG dossier", "out");
+          appendTerm("  unify        - Access Case-02: UNIFY campus portal dossier", "out");
+          appendTerm("  scan         - Execute network vulnerability sweep", "out");
+          appendTerm("  decrypt      - Run cryptographic crack simulator", "out");
+          appendTerm("  matrix       - Toggle Matrix digital rain animation", "out");
+          appendTerm("  whoami       - Display current caller identity & IP token", "out");
+          appendTerm("  deploy       - Display deployment status & live URL", "out");
+          appendTerm("  clear        - Wipe terminal console output", "out");
+        },
+        team: function () {
+          appendTerm("TEAM BUG FINDERS COMMANDERS // HIERARCHY & UNITS:", "cmd");
+          SQUAD.forEach(function (a) {
+            appendTerm("  [" + a.id + "] " + a.rank + ": " + a.name + " (" + a.role + ")", "accent");
+          });
+        },
+        squad: function () {
+          TERMINAL_COMMANDS.team();
+        },
+        projects: function () {
+          appendTerm("REGISTERED CASES & OPERATIONS:", "cmd");
+          currentCases.forEach(function (c) {
+            appendTerm("  " + c.caseCode + " -> " + c.name + " [" + c.status + "] — " + c.tagline, "accent");
+          });
+          appendTerm("Tip: Type a project codename (e.g. 'questforge') or click Dossier for full spec.", "dim");
+        },
+        questforge: function () {
+          var c = currentCases.find(function (i) { return i.id === "questforge"; });
+          if (c) openCaseDossier(c.id);
+          appendTerm("Opening QuestForge Classified Dossier modal...", "accent");
+        },
+        unify: function () {
+          var c = currentCases.find(function (i) { return i.id === "unify"; });
+          if (c) openCaseDossier(c.id);
+          appendTerm("Opening UNIFY Campus OS Classified Dossier modal...", "accent");
+        },
+        addproject: function () {
+          openAddModal();
+          appendTerm("Opening New Operation Registration Wizard...", "warn");
+        },
+        scan: function () {
+          playSound('alert');
+          appendTerm("[*] INITIATING TACTICAL NETWORK PENETRATION SCAN...", "warn");
+          appendTerm("Scanning subnet 10.14.0.0/16 (IIT Bhubaneswar Grid)...", "dim");
+          setTimeout(function () {
+            appendTerm("[+] Node 10.14.2.1: PORT 22 (SSH) - OPEN [OpenSSH 8.9p1]", "out");
+            appendTerm("[+] Node 10.14.2.80: PORT 80/443 (HTTP/HTTPS) - SECURED [Nginx TLS 1.3]", "out");
+            appendTerm("[+] Node 10.14.5.27: PORT 5432 (PostgreSQL) - FILTERED [Auth Enforced]", "out");
+            appendTerm("[✓] SCAN COMPLETED: 0 Critical Vulnerabilities Detected. System Hardened.", "accent");
+            playSound('granted');
+          }, 650);
+        },
+        decrypt: function () {
+          playSound('cmd');
+          appendTerm("[*] INITIALIZING CRYPTOGRAPHIC DECRYPTION MATRIX...", "warn");
+          var hashes = [
+            "0x9F82A4: [###.......] Brute-forcing RSA-4096 key...",
+            "0x9F82B1: [######....] Diffie-Hellman Exchange verified...",
+            "0x9F82CC: [##########] SHA-256 Checksum Verified: 7b9a4c10e",
+            "[✓] PAYLOAD DECRYPTED: 'BUG FINDERS COMMANDERS RULES THE CYBER DOMAIN'"
+          ];
+          hashes.forEach(function (h, idx) {
+            setTimeout(function () {
+              appendTerm(h, idx === hashes.length - 1 ? "accent" : "dim");
+              if (idx === hashes.length - 1) playSound('granted');
+            }, (idx + 1) * 350);
+          });
+        },
+        matrix: function () {
+          matrixActive = !matrixActive;
+          appendTerm("Matrix Digital Rain Canvas: " + (matrixActive ? "ACTIVE" : "SUSPENDED"), "warn");
+          if (!matrixActive) ctx.clearRect(0, 0, canvas.width, canvas.height);
+        },
+        whoami: function () {
+          appendTerm("USER TELEMETRY:", "cmd");
+          appendTerm("  Identity: Guest Operative // Bug Finders Commanders Network", "out");
+          appendTerm("  Clearance: Level 4 Provisional Access Granted", "accent");
+          appendTerm("  Terminal Node: " + navigator.userAgent.slice(0, 40) + "...", "dim");
+        },
+        deploy: function () {
+          appendTerm("DEPLOYMENT TELEMETRY:", "cmd");
+          appendTerm("  Provider: GitHub Pages (Global CDN)", "accent");
+          appendTerm("  Status: Production Live (100% Public Access)", "accent");
+          appendTerm("  URL: https://piyush77777777777.github.io/bugfinders-commanders/", "warn");
+          appendTerm("  Repo: https://github.com/piyush77777777777/bugfinders-commanders", "dim");
+        },
+        clear: function () {
+          bootTerminal();
+        }
+      };
+
+      function executeCommand(raw) {
+        var cmd = raw.trim().toLowerCase();
+        if (!cmd) return;
+        playSound('cmd');
+        appendTerm("root@bugfinders:~# " + raw, "cmd");
+        termHistory.push(raw);
+        termHistoryIndex = termHistory.length;
+
+        if (TERMINAL_COMMANDS[cmd]) {
+          TERMINAL_COMMANDS[cmd]();
+        } else {
+          // Check if command is a case name
+          var matchedCase = currentCases.find(function (c) {
+            return c.id === cmd || c.name.toLowerCase() === cmd;
+          });
+          if (matchedCase) {
+            openCaseDossier(matchedCase.id);
+            appendTerm("Displaying dossier for " + matchedCase.name + "...", "accent");
+          } else {
+            playSound('beep');
+            appendTerm("Directive not recognized: '" + raw + "'. Type 'help' for instructions.", "error");
+          }
+        }
+      }
+
+      termForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var val = termInput.value;
+        termInput.value = "";
+        executeCommand(val);
+      });
+
+      termInput.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowUp") {
+          if (termHistory.length > 0 && termHistoryIndex > 0) {
+            termHistoryIndex--;
+            termInput.value = termHistory[termHistoryIndex];
+          }
+          e.preventDefault();
+        } else if (e.key === "ArrowDown") {
+          if (termHistoryIndex < termHistory.length - 1) {
+            termHistoryIndex++;
+            termInput.value = termHistory[termHistoryIndex];
+          } else {
+            termHistoryIndex = termHistory.length;
+            termInput.value = "";
+          }
+          e.preventDefault();
+        } else if (e.key === "Tab") {
+          e.preventDefault();
+          var prefix = termInput.value.toLowerCase().trim();
+          var allDirectives = Object.keys(TERMINAL_COMMANDS);
+          var match = allDirectives.find(function (d) { return d.indexOf(prefix) === 0; });
+          if (match) termInput.value = match;
+        }
+      });
+
+      // Quick bar chips
+      document.querySelectorAll(".quick-chip").forEach(function (chip) {
+        chip.addEventListener("click", function () {
+          var cmd = chip.getAttribute("data-cmd");
+          executeCommand(cmd);
+        });
+      });
+
+      document.getElementById("btn-clear-term").addEventListener("click", function () {
+        bootTerminal();
+        playSound('beep');
+      });
+
+      document.getElementById("btn-copy-term").addEventListener("click", function () {
+        playSound('beep');
+        var text = termBody.innerText;
+        navigator.clipboard.writeText(text).then(function () {
+          showToast("Terminal session log copied to clipboard");
+        });
+      });
+
+      /* Close modals when clicking outside */
+      window.addEventListener("click", function (e) {
+        if (e.target === modalAdd) closeAddModal();
+        if (e.target === modalDossier) modalDossier.classList.remove("open");
+      });
+
+      // Escape key closes modal
+      window.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          closeAddModal();
+          modalDossier.classList.remove("open");
+        }
+      });
+
+      /* Initial Boot */
+      renderCases();
+      renderSquad();
+      updateStats();
+
+    })();
+  </script>
+</body>
+</html>
