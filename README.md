@@ -25,7 +25,7 @@
    - Canvas-driven Matrix digital rain with neon cyan and matrix green glyph streams.
    - CRT scanline & retro monitor distortion overlay with instant toggle.
    - Cyber audio sound effects via Web Audio API (keystrokes, terminal affirmative chirps, alerts, access granted tones) with Mute/Unmute toggle.
-   - Real-time radar telemetry pulse and live IIT Bhubaneswar grid status.
+   - Real-time radar telemetry pulse and live TRIDENT grid status.
 
 2. **Root Command Terminal**:
    - Interactive shell with directives: `help`, `team`, `projects`, `addproject`, `questforge`, `unify`, `scan`, `decrypt`, `matrix`, `whoami`, `deploy`, `clear`.
