@@ -1300,8 +1300,8 @@
                   <div class="val" id="stat-agents-count">8 SQUAD</div>
                 </div>
                 <div class="radar-stat-box">
-                  <div class="label">Registered Operations</div>
-                  <div class="val" id="stat-cases-count">3 CASES</div>
+                  <div class="label">Live Deployments</div>
+                  <div class="val" id="stat-cases-count">4 CASES</div>
                 </div>
               </div>
             </div>
@@ -1310,19 +1310,36 @@
           <!-- Featured Landing Showcase Callout -->
           <div class="landing-featured-banner">
             <div class="feat-item">
-              <h4>🗡️ Case-01: QuestForge (Life RPG)</h4>
+              <h4>🎓 Case-01: AstraCampus (CIT Portal)</h4>
+              <p>Unified AI-assisted venue scheduling, clash-free timetabling, and campus operating system for Chilika Institution of Technology (CIT).</p>
+              <div style="display:flex; gap:12px; margin-top:4px;">
+                <a href="https://piyush77777777777.github.io/AstraCampus/" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; font-weight:bold; text-decoration:none;">⚡ Open AstraCampus &rarr;</a>
+                <a href="https://github.com/piyush77777777777/AstraCampus" target="_blank" rel="noopener" class="mono" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none;">Codebase</a>
+              </div>
+            </div>
+            <div class="feat-item">
+              <h4>🗡️ Case-02: QuestForge (Life RPG)</h4>
               <p>Turn daily grind into epic RPG progression. XP, levels, attribute growth, and armory looting. 24-Hour Hackathon build.</p>
-              <a href="https://github.com/piyush77777777777/questforge" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Inspect Repository</a>
+              <div style="display:flex; gap:12px; margin-top:4px;">
+                <a href="https://questforge-life-rpg.netlify.app" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; font-weight:bold; text-decoration:none;">⚡ Open QuestForge &rarr;</a>
+                <a href="https://github.com/piyush77777777777/questforge" target="_blank" rel="noopener" class="mono" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none;">Codebase</a>
+              </div>
             </div>
             <div class="feat-item">
-              <h4>🏛️ Case-02: UNIFY Campus OS</h4>
+              <h4>🏛️ Case-03: UNIFY Campus OS</h4>
               <p>Centralized student & campus super-portal with 60+ modular services, role-based security, and event streaming.</p>
-              <a href="https://github.com/piyush77777777777/unify-campus-portal" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Inspect Repository</a>
+              <div style="display:flex; gap:12px; margin-top:4px;">
+                <a href="https://piyush77777777777.github.io/unify-campus-portal/" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; font-weight:bold; text-decoration:none;">⚡ Open UNIFY &rarr;</a>
+                <a href="https://github.com/piyush77777777777/unify-campus-portal" target="_blank" rel="noopener" class="mono" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none;">Codebase</a>
+              </div>
             </div>
             <div class="feat-item">
-              <h4>🛡️ Squad Intelligence Hierarchy</h4>
-              <p>Strict division of responsibilities: Strategic Command, Content Operations, Voice Intelligence (VIU), Presentation, and Field Operations.</p>
-              <a href="#agents" class="mono" style="color:var(--neon-green); font-size:0.85rem; text-decoration:none;">&rarr; Inspect Squad Roster</a>
+              <h4>🛡️ Case-04: Bug Finders Commanders</h4>
+              <p>Cyber tactical operations console, telemetry radar, interactive root terminal, and personnel command headquarters.</p>
+              <div style="display:flex; gap:12px; margin-top:4px;">
+                <a href="https://piyush77777777777.github.io/bugfinders-commanders/" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; font-weight:bold; text-decoration:none;">⚡ Open Commanders &rarr;</a>
+                <a href="https://github.com/piyush77777777777/bugfinders-commanders" target="_blank" rel="noopener" class="mono" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none;">Codebase</a>
+              </div>
             </div>
           </div>
 
@@ -1330,7 +1347,7 @@
           <div class="metrics-bar">
             <div class="metric-card">
               <span class="title">TOTAL OPERATIONS</span>
-              <span class="count" id="dash-total-ops">3</span>
+              <span class="count" id="dash-total-ops">4</span>
               <span class="sub">Production & Hackathon Builds</span>
             </div>
             <div class="metric-card">
@@ -1446,6 +1463,7 @@
               <button class="quick-chip" data-cmd="help">HELP</button>
               <button class="quick-chip" data-cmd="team">TEAM</button>
               <button class="quick-chip" data-cmd="projects">PROJECTS</button>
+              <button class="quick-chip" data-cmd="astracampus">ASTRACAMPUS</button>
               <button class="quick-chip" data-cmd="questforge">QUESTFORGE</button>
               <button class="quick-chip" data-cmd="unify">UNIFY</button>
               <button class="quick-chip" data-cmd="scan">SCAN NETWORK</button>
@@ -1646,9 +1664,15 @@
           <input type="text" id="proj-tech" placeholder="e.g. React, Node.js, WebSockets, Python, Docker">
         </div>
 
-        <div class="form-group">
-          <label for="proj-github-url">GitHub Repository URL</label>
-          <input type="url" id="proj-github-url" placeholder="https://github.com/piyush77777777777/...">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+          <div class="form-group">
+            <label for="proj-project-url">Direct Project URL (Live Web)</label>
+            <input type="url" id="proj-project-url" placeholder="https://piyush77777777777.github.io/...">
+          </div>
+          <div class="form-group">
+            <label for="proj-github-url">GitHub Repository URL</label>
+            <input type="url" id="proj-github-url" placeholder="https://github.com/piyush77777777777/...">
+          </div>
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
@@ -1970,8 +1994,28 @@
       /* INITIAL CASE FILES */
       var DEFAULT_CASES = [
         {
-          id: "questforge",
+          id: "astracampus",
           caseCode: "CASE-01",
+          name: "AstraCampus",
+          fullName: "AstraCampus — CIT Smart Portal & Timetable Hub",
+          category: "production",
+          tagline: "AI-Assisted Venue Scheduling & Campus Operating System",
+          status: "Active",
+          starred: true,
+          summary: "Unified AI-assisted venue scheduling, clash-free timetabling engine, and campus operating system for Chilika Institution of Technology (CIT). Features intelligent conflict resolution, real-time schedule distribution, faculty coordination, and seamless student access.",
+          tech: ["React", "TypeScript", "TailwindCSS", "Vite", "AI Scheduling", "PWA"],
+          points: [
+            "AI-powered automated clash-free timetable synthesis and venue allocation.",
+            "Dynamic faculty workload management and multi-room conflict avoidance.",
+            "Integrated PWA offline timetable caching and live notification pipeline.",
+            "Deployed production campus portal for Chilika Institution of Technology (CIT)."
+          ],
+          projectUrl: "https://piyush77777777777.github.io/AstraCampus/",
+          githubUrl: "https://github.com/piyush77777777777/AstraCampus"
+        },
+        {
+          id: "questforge",
+          caseCode: "CASE-02",
           name: "QuestForge",
           fullName: "QuestForge — Realm of Habit",
           category: "hackathon",
@@ -1987,11 +2031,12 @@
             "Secure session authentication backed by relational schema storing user character data.",
             "Constructed within 24 hours for the Life RPG Problem Statement."
           ],
+          projectUrl: "https://questforge-life-rpg.netlify.app",
           githubUrl: "https://github.com/piyush77777777777/questforge"
         },
         {
           id: "unify",
-          caseCode: "CASE-02",
+          caseCode: "CASE-03",
           name: "UNIFY",
           fullName: "UNIFY — Decentralized Campus Operating System",
           category: "production",
@@ -2006,24 +2051,27 @@
             "Real-time event notification pipeline powered by Redis Pub/Sub.",
             "Complete architecture blueprint and micro-service mind map deployed in production."
           ],
+          projectUrl: "https://piyush77777777777.github.io/unify-campus-portal/",
           githubUrl: "https://github.com/piyush77777777777/unify-campus-portal"
         },
         {
-          id: "cyberguard",
-          caseCode: "CASE-03",
-          name: "CyberGuard Sentinel",
-          fullName: "CyberGuard Sentinel — AI Network Threat Hunter",
+          id: "bugfinders-commanders",
+          caseCode: "CASE-04",
+          name: "Bug Finders Commanders",
+          fullName: "Bug Finders Commanders — Cyber Tactical Terminal",
           category: "cyber",
-          tagline: "Autonomous Vulnerability Scanner & Packet Inspector",
+          tagline: "Central Command Center & Threat Operations Console",
           status: "Active",
-          starred: false,
-          summary: "Automated vulnerability scanner and endpoint telemetry inspector designed to discover anomalous packet signatures, misconfigured CORS headers, and open ports across campus infrastructure.",
-          tech: ["Python", "Go", "FastAPI", "Scapy", "SQLite"],
+          starred: true,
+          summary: "Tactical command dashboard and operations console for Team BUG FINDERS COMMANDERS. Features real-time telemetry radar, interactive root bash terminal, Matrix data stream, dual Public/Admin clearances, and encrypted squad dossiers.",
+          tech: ["HTML5", "CSS3 / Cyberpunk UI", "Web Audio API", "JavaScript", "GitHub Pages"],
           points: [
-            "Real-time heuristic threat detection checking packet streams against zero-day CVE catalogs.",
-            "Automated SSL/TLS cipher audit and HTTP security header compliance scoring.",
-            "Interactive topological network graph displaying active nodes and vulnerabilities."
+            "Integrated root terminal simulator with direct command execution and autocomplete.",
+            "Dual-clearance operational view: Public Guest mode vs. Level 5 Commander Executive mode.",
+            "Dynamic project management and modular operations storage with JSON data portability.",
+            "Radar telemetry monitor and Web Audio synthesizer acoustic feedback."
           ],
+          projectUrl: "https://piyush77777777777.github.io/bugfinders-commanders/",
           githubUrl: "https://github.com/piyush77777777777/bugfinders-commanders"
         }
       ];
@@ -2031,12 +2079,12 @@
       /* Storage initialization */
       var currentCases = [];
       try {
-        var saved = localStorage.getItem("bf_custom_cases_v2");
+        var saved = localStorage.getItem("bf_custom_cases_v5");
         if (saved) {
           currentCases = JSON.parse(saved);
         } else {
           currentCases = DEFAULT_CASES;
-          localStorage.setItem("bf_custom_cases_v2", JSON.stringify(currentCases));
+          localStorage.setItem("bf_custom_cases_v5", JSON.stringify(currentCases));
         }
       } catch (e) {
         currentCases = DEFAULT_CASES;
@@ -2044,7 +2092,7 @@
 
       function saveCases() {
         try {
-          localStorage.setItem("bf_custom_cases_v2", JSON.stringify(currentCases));
+          localStorage.setItem("bf_custom_cases_v5", JSON.stringify(currentCases));
         } catch (e) {}
         renderCases();
         updateStats();
@@ -2101,6 +2149,8 @@
             return '<span class="tech-tag">' + esc(t) + '</span>';
           }).join("");
 
+          var launchUrl = c.projectUrl || c.demoUrl;
+          var launchBtn = launchUrl ? '<a href="' + esc(launchUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm" style="background:var(--cyan); color:#020912; font-weight:700; border-color:var(--cyan); box-shadow:0 0 10px rgba(0,240,255,0.4);">⚡ Open Project</a>' : '';
           var ghBtn = c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm" style="color:var(--cyan);">GitHub Repo</a>' : '';
 
           // Admin controls on card (Edit / Delete)
@@ -2120,7 +2170,8 @@
             '<p class="project-desc">' + esc(c.summary) + '</p>' +
             '<div class="project-tech-tags">' + techHtml + '</div>' +
             '<div class="project-card-footer">' +
-              '<div class="card-actions">' +
+              '<div class="card-actions" style="display:flex; flex-wrap:wrap; gap:6px;">' +
+                launchBtn +
                 '<button type="button" class="cyber-btn-sm btn-dossier" data-id="' + esc(c.id) + '">Dossier</button>' +
                 '<button type="button" class="cyber-btn-sm btn-star" data-id="' + esc(c.id) + '">' + starLabel + '</button>' +
               '</div>' +
@@ -2202,7 +2253,8 @@
             '<div style="display:flex; flex-wrap:wrap; gap:8px;">' + techBadges + '</div>' +
           '</div>' +
           '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; padding-top:16px; border-top:1px solid var(--border-dim);">' +
-            (c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="btn btn-primary">Inspect GitHub Codebase</a>' : '') +
+            ((c.projectUrl || c.demoUrl) ? '<a href="' + esc(c.projectUrl || c.demoUrl) + '" target="_blank" rel="noopener" class="btn btn-primary" style="background:var(--cyan); color:#020912; font-weight:bold; box-shadow:0 0 16px var(--cyan);">🚀 Open Live Project</a>' : '') +
+            (c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="btn btn-outline">Inspect GitHub Codebase</a>' : '') +
             adminDeleteBtn +
           '</div>';
 
@@ -2368,6 +2420,7 @@
         var summary = document.getElementById("proj-summary").value.trim();
         var techRaw = document.getElementById("proj-tech").value.trim();
         var githubUrl = document.getElementById("proj-github-url").value.trim();
+        var projectUrl = document.getElementById("proj-project-url") ? document.getElementById("proj-project-url").value.trim() : "";
 
         var techArray = techRaw ? techRaw.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : ["Web", "TypeScript"];
         var id = name.toLowerCase().replace(/[^a-z0-9]/g, "-") + "-" + Date.now().toString(36);
@@ -2387,6 +2440,7 @@
             "Project architecture initialized by Team Bug Finders.",
             "Deployed and authenticated in command database."
           ],
+          projectUrl: projectUrl || "",
           githubUrl: githubUrl || ""
         };
 
@@ -2459,8 +2513,9 @@
           appendTerm("  help         - Display this tactical manual", "out");
           appendTerm("  team / squad - Inspect Bug Finders personnel hierarchy", "out");
           appendTerm("  projects     - List all registered cases and deployments", "out");
-          appendTerm("  questforge   - Access Case-01: QuestForge habit RPG dossier", "out");
-          appendTerm("  unify        - Access Case-02: UNIFY campus portal dossier", "out");
+          appendTerm("  astracampus  - Access Case-01: AstraCampus portal dossier", "out");
+          appendTerm("  questforge   - Access Case-02: QuestForge habit RPG dossier", "out");
+          appendTerm("  unify        - Access Case-03: UNIFY campus portal dossier", "out");
           appendTerm("  scan         - Execute network vulnerability sweep", "out");
           appendTerm("  decrypt      - Run cryptographic crack simulator", "out");
           appendTerm("  matrix       - Toggle Matrix digital rain animation", "out");
@@ -2487,6 +2542,11 @@
           currentCases.forEach(function (c) {
             appendTerm("  " + c.caseCode + " -> " + c.name + " [" + c.status + "] — " + c.tagline, "accent");
           });
+        },
+        astracampus: function () {
+          var c = currentCases.find(function (i) { return i.id === "astracampus"; });
+          if (c) openCaseDossier(c.id);
+          appendTerm("Opening AstraCampus CIT Portal Classified Dossier modal...", "accent");
         },
         questforge: function () {
           var c = currentCases.find(function (i) { return i.id === "questforge"; });

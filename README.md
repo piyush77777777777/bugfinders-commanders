@@ -29,18 +29,28 @@
    - Real-time radar telemetry pulse and live TRIDENT grid status.
 
 2. **Root Command Terminal**:
-   - Interactive shell with directives: `help`, `team`, `projects`, `addproject`, `questforge`, `unify`, `scan`, `decrypt`, `matrix`, `whoami`, `deploy`, `clear`.
+   - Interactive shell with directives: `help`, `team`, `projects`, `addproject`, `astracampus`, `questforge`, `unify`, `scan`, `decrypt`, `matrix`, `whoami`, `deploy`, `clear`.
    - Command history navigation (`ArrowUp`/`ArrowDown`), autocomplete (`Tab`), and quick-action chips.
 
 3. **Future-Proof Modular Case & Project System**:
-   - "+ Add New Project" UI modal to dynamically register any future project with custom case code, category, tech stack, summary, live URL, and GitHub repository.
+   - "+ Add New Project" UI modal to dynamically register any future project with custom case code, category, tech stack, summary, direct project URL, and GitHub repository.
+   - Every project card and classified dossier contains direct **⚡ Open Project** launch links.
    - Automatically saves to persistent local storage so new additions remain permanently.
    - Built-in "Export JSON" and "Reset" features to backup or restore the database anytime.
 
-4. **Projects & Operations**:
-   - **Bug Finders Commanders**: [https://piyush77777777777.github.io/bugfinders-commanders/](https://piyush77777777777.github.io/bugfinders-commanders/)
-   - **QuestForge — Realm of Habit**: [https://github.com/piyush77777777777/questforge](https://github.com/piyush77777777777/questforge)
-   - **UNIFY — Decentralized Campus OS**: [https://github.com/piyush77777777777/unify-campus-portal](https://github.com/piyush77777777777/unify-campus-portal)
+4. **Registered Operations & Deployments**:
+   - **Case-01: AstraCampus — CIT Smart Portal & Timetable Hub**
+     - Live App: [https://piyush77777777777.github.io/AstraCampus/](https://piyush77777777777.github.io/AstraCampus/)
+     - Codebase: [https://github.com/piyush77777777777/AstraCampus](https://github.com/piyush77777777777/AstraCampus)
+   - **Case-02: QuestForge — Realm of Habit**
+     - Live App: [https://questforge-life-rpg.netlify.app](https://questforge-life-rpg.netlify.app)
+     - Codebase: [https://github.com/piyush77777777777/questforge](https://github.com/piyush77777777777/questforge)
+   - **Case-03: UNIFY — Decentralized Campus OS**
+     - Live App: [https://piyush77777777777.github.io/unify-campus-portal/](https://piyush77777777777.github.io/unify-campus-portal/)
+     - Codebase: [https://github.com/piyush77777777777/unify-campus-portal](https://github.com/piyush77777777777/unify-campus-portal)
+   - **Case-04: Bug Finders Commanders — Cyber Tactical Terminal**
+     - Live App: [https://piyush77777777777.github.io/bugfinders-commanders/](https://piyush77777777777.github.io/bugfinders-commanders/)
+     - Codebase: [https://github.com/piyush77777777777/bugfinders-commanders](https://github.com/piyush77777777777/bugfinders-commanders)
 
 ---
 
