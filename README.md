@@ -11,6 +11,7 @@
 |---|---|---|---|---|
 | **BF-001** | **Piyush Kumar Dey** | **Commander** | Strategic Command & Architecture | Mission Leader, System Architecture, Technical Strategy |
 | **BF-002** | **Kunal Kumar** | **Deputy Commander** | Executive Command & Backend Eng. | Deputy Leader, Distributed Systems, API & Database Security |
+| **BF-008** | **Ritika Patra** | **Lieutenant Commander** | Executive Command & Core Engineering | Third-in-Command, Lead Software Developer, Core Architecture |
 | **BF-003** | **Shiv Kumar Sahoo** | **Content Operations Lead** | Content Operations & Intel | Lead Technical Editor, Documentation Protocols, Code Reviews |
 | **BF-004** | **Prangya Smita Mallick** | **Voice Intelligence Operative** | Voice Intelligence Unit (VIU) | Voice Artist, Audio Production, Pitch & Narrative Delivery |
 | **BF-005** | **Abhipsa Sahoo** | **Presentation Specialist** | Presentation & Public Relations | Product Demo Flow, Pitch Deck Delivery, Keynote Storytelling |
@@ -36,10 +37,10 @@
    - Automatically saves to persistent local storage so new additions remain permanently.
    - Built-in "Export JSON" and "Reset" features to backup or restore the database anytime.
 
-4. **Live Connected Deployments**:
+4. **Projects & Operations**:
    - **Bug Finders Commanders**: [https://piyush77777777777.github.io/bugfinders-commanders/](https://piyush77777777777.github.io/bugfinders-commanders/)
-   - **QuestForge — Realm of Habit**: [https://questforge-life-rpg.netlify.app](https://questforge-life-rpg.netlify.app)
-   - **UNIFY — Decentralized Campus OS**: [https://unify-campus-portal.netlify.app](https://unify-campus-portal.netlify.app)
+   - **QuestForge — Realm of Habit**: [https://github.com/piyush77777777777/questforge](https://github.com/piyush77777777777/questforge)
+   - **UNIFY — Decentralized Campus OS**: [https://github.com/piyush77777777777/unify-campus-portal](https://github.com/piyush77777777777/unify-campus-portal)
 
 ---
 

@@ -934,6 +934,24 @@
       border-radius: 0 0 6px 6px;
       letter-spacing: 0.08em;
     }
+    .agent-card.exec-card {
+      border-color: rgba(255, 215, 0, 0.6);
+      background: linear-gradient(145deg, rgba(20, 18, 8, 0.9), rgba(10, 9, 4, 0.95));
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    }
+    .agent-card.exec-card::before {
+      content: "★ EXEC COMMAND ★";
+      position: absolute;
+      top: 0; right: 24px;
+      background: var(--gold);
+      color: #000;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 0 0 6px 6px;
+      letter-spacing: 0.08em;
+    }
     .agent-top-row {
       display: flex;
       align-items: center;
@@ -1240,7 +1258,7 @@
               </h1>
 
               <p class="hero-desc">
-                High-performance cyber squadron engineering next-generation architectures, rapid hackathon prototypes, and resilient web solutions. Led by Commander <strong>Piyush Kumar Dey</strong> and Deputy Commander <strong>Kunal Kumar</strong>.
+                High-performance cyber squadron engineering next-generation architectures, rapid hackathon prototypes, and resilient web solutions. Led by Commander <strong>Piyush Kumar Dey</strong>, Deputy Commander <strong>Kunal Kumar</strong>, and Lieutenant Commander <strong>Ritika Patra</strong>.
               </p>
 
               <!-- Dynamic CTA buttons (changes based on Public vs Admin view) -->
@@ -1279,10 +1297,10 @@
               <div class="radar-stats-grid">
                 <div class="radar-stat-box">
                   <div class="label">Active Operatives</div>
-                  <div class="val" id="stat-agents-count">7 SQUAD</div>
+                  <div class="val" id="stat-agents-count">8 SQUAD</div>
                 </div>
                 <div class="radar-stat-box">
-                  <div class="label">Live Deployments</div>
+                  <div class="label">Registered Operations</div>
                   <div class="val" id="stat-cases-count">3 CASES</div>
                 </div>
               </div>
@@ -1294,12 +1312,12 @@
             <div class="feat-item">
               <h4>🗡️ Case-01: QuestForge (Life RPG)</h4>
               <p>Turn daily grind into epic RPG progression. XP, levels, attribute growth, and armory looting. 24-Hour Hackathon build.</p>
-              <a href="https://questforge-life-rpg.netlify.app" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Launch Live App</a>
+              <a href="https://github.com/piyush77777777777/questforge" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Inspect Repository</a>
             </div>
             <div class="feat-item">
               <h4>🏛️ Case-02: UNIFY Campus OS</h4>
               <p>Centralized student & campus super-portal with 60+ modular services, role-based security, and event streaming.</p>
-              <a href="https://unify-campus-portal.netlify.app" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Launch Portal</a>
+              <a href="https://github.com/piyush77777777777/unify-campus-portal" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; text-decoration:none;">&rarr; Inspect Repository</a>
             </div>
             <div class="feat-item">
               <h4>🛡️ Squad Intelligence Hierarchy</h4>
@@ -1323,7 +1341,7 @@
             <div class="metric-card">
               <span class="title">SQUAD INTEGRITY</span>
               <span class="count" style="color:var(--amber)">100%</span>
-              <span class="sub">7 Active Elite Operatives</span>
+              <span class="sub">8 Active Elite Operatives</span>
             </div>
             <div class="metric-card">
               <span class="title">SUCCESS RATE</span>
@@ -1469,47 +1487,47 @@
               <div style="display:flex; flex-direction:column; gap:12px;" class="mono">
                 <div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
-                    <span>COMMAND & CORE ARCHITECTURE</span>
-                    <span style="color:var(--cyan)">28% (2 Ops)</span>
+                    <span>COMMAND & CORE ENGINEERING</span>
+                    <span style="color:var(--cyan)">38% (3 Ops)</span>
                   </div>
                   <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
-                    <div style="width:28%; height:100%; background:var(--cyan); box-shadow:0 0 8px var(--cyan);"></div>
+                    <div style="width:38%; height:100%; background:var(--cyan); box-shadow:0 0 8px var(--cyan);"></div>
                   </div>
                 </div>
                 <div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
                     <span>VOICE INTELLIGENCE UNIT (VIU)</span>
-                    <span style="color:var(--neon-green)">28% (2 Ops)</span>
+                    <span style="color:var(--neon-green)">25% (2 Ops)</span>
                   </div>
                   <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
-                    <div style="width:28%; height:100%; background:var(--neon-green); box-shadow:0 0 8px var(--neon-green);"></div>
+                    <div style="width:25%; height:100%; background:var(--neon-green); box-shadow:0 0 8px var(--neon-green);"></div>
                   </div>
                 </div>
                 <div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
                     <span>CONTENT OPERATIONS</span>
-                    <span style="color:var(--amber)">14% (1 Op)</span>
+                    <span style="color:var(--amber)">12% (1 Op)</span>
                   </div>
                   <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
-                    <div style="width:14%; height:100%; background:var(--amber);"></div>
+                    <div style="width:12%; height:100%; background:var(--amber);"></div>
                   </div>
                 </div>
                 <div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
                     <span>PRESENTATION & PR</span>
-                    <span style="color:var(--purple)">14% (1 Op)</span>
+                    <span style="color:var(--purple)">12% (1 Op)</span>
                   </div>
                   <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
-                    <div style="width:14%; height:100%; background:var(--purple);"></div>
+                    <div style="width:12%; height:100%; background:var(--purple);"></div>
                   </div>
                 </div>
                 <div>
                   <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:0.85rem;">
                     <span>FIELD OPERATIONS</span>
-                    <span style="color:var(--crimson)">16% (1 Op)</span>
+                    <span style="color:var(--crimson)">13% (1 Op)</span>
                   </div>
                   <div style="height:6px; background:#040911; border-radius:3px; overflow:hidden;">
-                    <div style="width:16%; height:100%; background:var(--crimson);"></div>
+                    <div style="width:13%; height:100%; background:var(--crimson);"></div>
                   </div>
                 </div>
               </div>
@@ -1549,7 +1567,7 @@
           <span style="font-family:var(--font-display); font-size:1.1rem; font-weight:700; color:#fff;">TEAM BUG FINDERS COMMANDERS // TRIDENT</span>
         </div>
         <p class="mono" style="color:var(--text-muted); font-size:0.85rem;">
-          Commanders Architecture directed by Commander Piyush Kumar Dey (Leader) & Deputy Commander Kunal Kumar (Deputy Leader). All Rights Reserved.
+          Commanders Architecture directed by Commander Piyush Kumar Dey (Leader), Deputy Commander Kunal Kumar (Deputy Leader) & Lieutenant Commander Ritika Patra (Third-in-Command). All Rights Reserved.
         </p>
       </div>
     </footer>
@@ -1628,15 +1646,9 @@
           <input type="text" id="proj-tech" placeholder="e.g. React, Node.js, WebSockets, Python, Docker">
         </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-          <div class="form-group">
-            <label for="proj-demo-url">Live Deployment URL</label>
-            <input type="url" id="proj-demo-url" placeholder="https://your-demo.netlify.app">
-          </div>
-          <div class="form-group">
-            <label for="proj-github-url">GitHub Repository URL</label>
-            <input type="url" id="proj-github-url" placeholder="https://github.com/piyush77777777777/...">
-          </div>
+        <div class="form-group">
+          <label for="proj-github-url">GitHub Repository URL</label>
+          <input type="url" id="proj-github-url" placeholder="https://github.com/piyush77777777777/...">
         </div>
 
         <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
@@ -1882,6 +1894,18 @@
           bio: "Deputy Commander overseeing backend resilience, high-concurrency protocols, and technical execution across operations."
         },
         {
+          id: "BF-008",
+          name: "Ritika Patra",
+          rank: "Lieutenant Commander",
+          role: "Third-in-Command & Lead Software Developer",
+          unit: "Executive Command & Core Engineering",
+          status: "Active",
+          clearance: "Level 4 [Beta Executive]",
+          specialization: "Lead Software Architecture, Full-Stack Systems, Executive Direction",
+          assigned: "Executive Operations & Core Engineering",
+          bio: "Third-in-Command of Team Bug Finders. Oversees core engineering pipelines, software development lifecycles, and tactical technical implementations across all operations."
+        },
+        {
           id: "BF-003",
           name: "Shiv Kumar Sahoo",
           rank: "Content Operations Lead",
@@ -1963,7 +1987,6 @@
             "Secure session authentication backed by relational schema storing user character data.",
             "Constructed within 24 hours for the Life RPG Problem Statement."
           ],
-          demoUrl: "https://questforge-life-rpg.netlify.app",
           githubUrl: "https://github.com/piyush77777777777/questforge"
         },
         {
@@ -1983,7 +2006,6 @@
             "Real-time event notification pipeline powered by Redis Pub/Sub.",
             "Complete architecture blueprint and micro-service mind map deployed in production."
           ],
-          demoUrl: "https://unify-campus-portal.netlify.app",
           githubUrl: "https://github.com/piyush77777777777/unify-campus-portal"
         },
         {
@@ -2002,7 +2024,6 @@
             "Automated SSL/TLS cipher audit and HTTP security header compliance scoring.",
             "Interactive topological network graph displaying active nodes and vulnerabilities."
           ],
-          demoUrl: "https://piyush77777777777.github.io/bugfinders-commanders/",
           githubUrl: "https://github.com/piyush77777777777/bugfinders-commanders"
         }
       ];
@@ -2080,8 +2101,7 @@
             return '<span class="tech-tag">' + esc(t) + '</span>';
           }).join("");
 
-          var demoBtn = c.demoUrl ? '<a href="' + esc(c.demoUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm" style="color:var(--neon-green); border-color:rgba(0,255,102,0.3)">Live Web</a>' : '';
-          var ghBtn = c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm">Repo</a>' : '';
+          var ghBtn = c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="cyber-btn-sm" style="color:var(--cyan);">GitHub Repo</a>' : '';
 
           // Admin controls on card (Edit / Delete)
           var adminCardActions = isAdmin ? 
@@ -2104,7 +2124,7 @@
                 '<button type="button" class="cyber-btn-sm btn-dossier" data-id="' + esc(c.id) + '">Dossier</button>' +
                 '<button type="button" class="cyber-btn-sm btn-star" data-id="' + esc(c.id) + '">' + starLabel + '</button>' +
               '</div>' +
-              '<div style="display:flex; gap:6px;">' + demoBtn + ghBtn + '</div>' +
+              '<div style="display:flex; gap:6px;">' + ghBtn + '</div>' +
             '</div>' +
           '</article>';
         }).join("");
@@ -2182,8 +2202,7 @@
             '<div style="display:flex; flex-wrap:wrap; gap:8px;">' + techBadges + '</div>' +
           '</div>' +
           '<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; padding-top:16px; border-top:1px solid var(--border-dim);">' +
-            (c.demoUrl ? '<a href="' + esc(c.demoUrl) + '" target="_blank" rel="noopener" class="btn btn-primary">Open Live Deployment</a>' : '') +
-            (c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="btn btn-outline">Inspect GitHub Codebase</a>' : '') +
+            (c.githubUrl ? '<a href="' + esc(c.githubUrl) + '" target="_blank" rel="noopener" class="btn btn-primary">Inspect GitHub Codebase</a>' : '') +
             adminDeleteBtn +
           '</div>';
 
@@ -2219,8 +2238,10 @@
         var container = document.getElementById("agents-container");
         container.innerHTML = SQUAD.map(function (a) {
           var isLeader = a.id === "BF-001";
+          var isExec = a.id === "BF-002" || a.id === "BF-008";
+          var cardClass = isLeader ? 'commander-card' : (isExec ? 'exec-card' : '');
 
-          return '<article class="agent-card ' + (isLeader ? 'commander-card' : '') + '">' +
+          return '<article class="agent-card ' + cardClass + '">' +
             '<div class="agent-top-row">' +
               '<div class="agent-avatar">' +
                 a.name[0] +
@@ -2295,7 +2316,7 @@
         e.preventDefault();
         var key = document.getElementById("auth-passcode").value.trim().toLowerCase();
         // Valid passcodes for Commander
-        if (key === "bf001" || key === "commander" || key === "piyush" || key === "admin") {
+        if (key === "bf001" || key === "bf008" || key === "commander" || key === "piyush" || key === "ritika" || key === "admin") {
           document.getElementById("auth-passcode").value = "";
           modalAuth.classList.remove("open");
           setAdminMode(true);
@@ -2346,7 +2367,6 @@
         var tagline = document.getElementById("proj-tagline").value.trim();
         var summary = document.getElementById("proj-summary").value.trim();
         var techRaw = document.getElementById("proj-tech").value.trim();
-        var demoUrl = document.getElementById("proj-demo-url").value.trim();
         var githubUrl = document.getElementById("proj-github-url").value.trim();
 
         var techArray = techRaw ? techRaw.split(",").map(function (s) { return s.trim(); }).filter(Boolean) : ["Web", "TypeScript"];
@@ -2367,7 +2387,6 @@
             "Project architecture initialized by Team Bug Finders.",
             "Deployed and authenticated in command database."
           ],
-          demoUrl: demoUrl || "",
           githubUrl: githubUrl || ""
         };
 
@@ -2427,8 +2446,9 @@
         appendTerm("==================================================================", "dim");
         appendTerm(" BUG FINDERS COMMANDERS // V3.8 TACTICAL SHELL", "cmd");
         appendTerm(" Mode: " + (isAdmin ? "[ROOT COMMANDER ADMIN]" : "[PUBLIC GUEST VIEW]"), isAdmin ? "warn" : "accent");
-        appendTerm(" Commander:        Piyush Kumar Dey [BF-001]", "accent");
-        appendTerm(" Deputy Commander: Kunal Kumar [BF-002]", "accent");
+        appendTerm(" Commander:            Piyush Kumar Dey [BF-001]", "accent");
+        appendTerm(" Deputy Commander:     Kunal Kumar [BF-002]", "accent");
+        appendTerm(" Lieutenant Commander: Ritika Patra [BF-008]", "accent");
         appendTerm(" Type 'help' for available directives." + (!isAdmin ? " Type 'login' to authenticate." : ""), "dim");
         appendTerm("==================================================================", "dim");
       }
