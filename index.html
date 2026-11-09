@@ -1301,7 +1301,7 @@
                 </div>
                 <div class="radar-stat-box">
                   <div class="label">Live Deployments</div>
-                  <div class="val" id="stat-cases-count">4 CASES</div>
+                  <div class="val" id="stat-cases-count">5 CASES</div>
                 </div>
               </div>
             </div>
@@ -1341,13 +1341,21 @@
                 <a href="https://github.com/piyush77777777777/bugfinders-commanders" target="_blank" rel="noopener" class="mono" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none;">Codebase</a>
               </div>
             </div>
+            <div class="feat-item">
+              <h4>🔮 Case-05: ShapeShifter AI (2D to 3D)</h4>
+              <p>Generative neural 2D-to-3D geometry synthesis. Turn sketches into watertight 3D models with real-time WebGL rendering and OBJ/STL export.</p>
+              <div style="display:flex; gap:12px; margin-top:4px;">
+                <a href="https://piyush77777777777.github.io/shapeshifter-ai/" target="_blank" rel="noopener" class="mono" style="color:var(--cyan); font-size:0.85rem; font-weight:bold; text-decoration:none;">⚡ Open ShapeShifter AI &rarr;</a>
+                <a href="https://github.com/piyush77777777777/shapeshifter-ai" target="_blank" rel="noopener" class="mono" style="color:var(--text-muted); font-size:0.85rem; text-decoration:none;">Codebase</a>
+              </div>
+            </div>
           </div>
 
           <!-- Metrics Counter Row -->
           <div class="metrics-bar">
             <div class="metric-card">
               <span class="title">TOTAL OPERATIONS</span>
-              <span class="count" id="dash-total-ops">4</span>
+              <span class="count" id="dash-total-ops">5</span>
               <span class="sub">Production & Hackathon Builds</span>
             </div>
             <div class="metric-card">
@@ -1464,6 +1472,7 @@
               <button class="quick-chip" data-cmd="team">TEAM</button>
               <button class="quick-chip" data-cmd="projects">PROJECTS</button>
               <button class="quick-chip" data-cmd="astracampus">ASTRACAMPUS</button>
+              <button class="quick-chip" data-cmd="shapeshifter">SHAPESHIFTER</button>
               <button class="quick-chip" data-cmd="questforge">QUESTFORGE</button>
               <button class="quick-chip" data-cmd="unify">UNIFY</button>
               <button class="quick-chip" data-cmd="scan">SCAN NETWORK</button>
@@ -2073,18 +2082,38 @@
           ],
           projectUrl: "https://piyush77777777777.github.io/bugfinders-commanders/",
           githubUrl: "https://github.com/piyush77777777777/bugfinders-commanders"
+        },
+        {
+          id: "shapeshifter",
+          caseCode: "CASE-05",
+          name: "ShapeShifter AI",
+          fullName: "ShapeShifter AI — 2D Sketch to 3D Generative Engine",
+          category: "ai",
+          tagline: "Generative 2D-to-3D Geometry Synthesis & Neural Asset Pipeline",
+          status: "Active",
+          starred: true,
+          summary: "Generative neural geometry engine converting 2D hand-drawn sketches into watertight 3D polygon meshes in real-time. Features natural language prompt guidance, 60fps WebGL viewport, voxel reconstruction, and instant OBJ/STL CAD export.",
+          tech: ["Three.js", "WebGL", "Canvas API", "Generative AI", "TypeScript", "OBJ/STL Export"],
+          points: [
+            "Interactive digital sketchpad with real-time vector analysis and contour extraction.",
+            "Multi-pass 3D voxelization and mesh extrusion reconstructing watertight polygon models.",
+            "Natural language prompt parsing guiding geometry styling, surface smoothing, and procedural materials.",
+            "Real-time 60fps WebGL orbital canvas with wireframe mode and one-click OBJ/STL CAD export."
+          ],
+          projectUrl: "https://piyush77777777777.github.io/shapeshifter-ai/",
+          githubUrl: "https://github.com/piyush77777777777/shapeshifter-ai"
         }
       ];
 
       /* Storage initialization */
       var currentCases = [];
       try {
-        var saved = localStorage.getItem("bf_custom_cases_v5");
+        var saved = localStorage.getItem("bf_custom_cases_v6");
         if (saved) {
           currentCases = JSON.parse(saved);
         } else {
           currentCases = DEFAULT_CASES;
-          localStorage.setItem("bf_custom_cases_v5", JSON.stringify(currentCases));
+          localStorage.setItem("bf_custom_cases_v6", JSON.stringify(currentCases));
         }
       } catch (e) {
         currentCases = DEFAULT_CASES;
@@ -2092,7 +2121,7 @@
 
       function saveCases() {
         try {
-          localStorage.setItem("bf_custom_cases_v5", JSON.stringify(currentCases));
+          localStorage.setItem("bf_custom_cases_v6", JSON.stringify(currentCases));
         } catch (e) {}
         renderCases();
         updateStats();
@@ -2516,6 +2545,7 @@
           appendTerm("  astracampus  - Access Case-01: AstraCampus portal dossier", "out");
           appendTerm("  questforge   - Access Case-02: QuestForge habit RPG dossier", "out");
           appendTerm("  unify        - Access Case-03: UNIFY campus portal dossier", "out");
+          appendTerm("  shapeshifter - Access Case-05: ShapeShifter AI 2D-to-3D dossier", "out");
           appendTerm("  scan         - Execute network vulnerability sweep", "out");
           appendTerm("  decrypt      - Run cryptographic crack simulator", "out");
           appendTerm("  matrix       - Toggle Matrix digital rain animation", "out");
@@ -2557,6 +2587,11 @@
           var c = currentCases.find(function (i) { return i.id === "unify"; });
           if (c) openCaseDossier(c.id);
           appendTerm("Opening UNIFY Campus OS Classified Dossier modal...", "accent");
+        },
+        shapeshifter: function () {
+          var c = currentCases.find(function (i) { return i.id === "shapeshifter"; });
+          if (c) openCaseDossier(c.id);
+          appendTerm("Opening ShapeShifter AI Classified Dossier modal...", "accent");
         },
         addproject: function () {
           if (!isAdmin) {

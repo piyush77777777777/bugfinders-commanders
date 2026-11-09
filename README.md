@@ -29,7 +29,7 @@
    - Real-time radar telemetry pulse and live TRIDENT grid status.
 
 2. **Root Command Terminal**:
-   - Interactive shell with directives: `help`, `team`, `projects`, `addproject`, `astracampus`, `questforge`, `unify`, `scan`, `decrypt`, `matrix`, `whoami`, `deploy`, `clear`.
+   - Interactive shell with directives: `help`, `team`, `projects`, `addproject`, `astracampus`, `shapeshifter`, `questforge`, `unify`, `scan`, `decrypt`, `matrix`, `whoami`, `deploy`, `clear`.
    - Command history navigation (`ArrowUp`/`ArrowDown`), autocomplete (`Tab`), and quick-action chips.
 
 3. **Future-Proof Modular Case & Project System**:
@@ -51,6 +51,9 @@
    - **Case-04: Bug Finders Commanders — Cyber Tactical Terminal**
      - Live App: [https://piyush77777777777.github.io/bugfinders-commanders/](https://piyush77777777777.github.io/bugfinders-commanders/)
      - Codebase: [https://github.com/piyush77777777777/bugfinders-commanders](https://github.com/piyush77777777777/bugfinders-commanders)
+   - **Case-05: ShapeShifter AI — 2D Sketch to 3D Generative Engine**
+     - Live App: [https://piyush77777777777.github.io/shapeshifter-ai/](https://piyush77777777777.github.io/shapeshifter-ai/)
+     - Codebase: [https://github.com/piyush77777777777/shapeshifter-ai](https://github.com/piyush77777777777/shapeshifter-ai)
 
 ---
 
